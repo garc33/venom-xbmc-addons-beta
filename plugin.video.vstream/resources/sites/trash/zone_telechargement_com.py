@@ -50,8 +50,16 @@ TV_NEWS = (URL_MAIN + 'emissions-tv.html', 'showMovies') # dernieres emissions t
 SPECT_NEWS = (URL_MAIN + 'spectacles.html', 'showMovies') # dernieres spectacles
 
 
-def load(): 
-    oGui = cGui() 
+def load():
+    oGui = cGui()
+    
+    oOutputParameterHandler = cOutputParameterHandler() 
+    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/') 
+    oGui.addDir(SITE_IDENTIFIER, 'showSearchMovies', 'Recherche de films', 'search.png', oOutputParameterHandler) 
+    
+    oOutputParameterHandler = cOutputParameterHandler() 
+    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearchSeries', 'Recherche de series', 'search.png', oOutputParameterHandler) 
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_EXCLUS[0])
@@ -88,14 +96,6 @@ def load():
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFR[1], 'Dernieres Series VOSTFR ajoutées', 'series.png', oOutputParameterHandler)
-	
-    oOutputParameterHandler = cOutputParameterHandler() 
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/') 
-    oGui.addDir(SITE_IDENTIFIER, 'showSearchMovies', 'Recherche de films', 'search.png', oOutputParameterHandler) 
-    
-    oOutputParameterHandler = cOutputParameterHandler() 
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearchSeries', 'Recherche de series', 'search.png', oOutputParameterHandler) 
     
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DOCU_NEWS[0])
@@ -188,7 +188,7 @@ def showMovies(sSearch = ''):
     sHtmlContent = oRequestHandler.request() 
     #sHtmlContent = sHtmlContent.replace('<span class="tr-dublaj"></span>', '').replace('<span class="tr-altyazi"></span>','')
     if 'series' in sUrl or 'documentaires' in sUrl or 'emissions' in sUrl :
-        sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="(.+?)" ><img class=.+?src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0" .+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href=".+?" >(.+?)<'
+        sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^<>"]+?)" ><img class=.+?src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0" .+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href=".+?" >(.+?)<'
     else:
         sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0"[^"]+?"Note spectateurs" style="[^"]+?"><img src="[^"]+?" border="0">[^<]+?</div><div style=""><div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?"[^>]+?>([^<]+?) <span class="detail_release size_11">'
     
@@ -200,7 +200,7 @@ def showMovies(sSearch = ''):
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     
-    print aResult 
+    #print aResult 
     
     if (aResult[0] == True):
         total = len(aResult[1])        
