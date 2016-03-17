@@ -64,12 +64,14 @@ class cPremiumHandler:
             return ''
         
         return data
+        
+    def AddCookies(self):
+        cookies = self.Readcookie(self.__sHosterIdentifier)
+        return 'Cookie=' + cookies
 
     def Authentificate(self):
 
         post_data = {}
-        
-        print 'ok'
         
         if 'uptobox' in self.__sHosterIdentifier:
             url = 'https://login.uptobox.com/logarithme'
@@ -117,6 +119,8 @@ class cPremiumHandler:
         head = response.headers
         response.close()
         
+        #print head
+        
         #fh = open('c:\\prem.txt', "w")
         #fh.write(sHtmlContent)
         #fh.close()
@@ -151,6 +155,7 @@ class cPremiumHandler:
         self.SaveCookie(self.__sHosterIdentifier,cookies)
         
         cGui().showInfo(self.__sDisplayName, 'Authentification reussie' , 5)
+        print 'Auhentification reussie'
         
         return True
         
@@ -163,7 +168,7 @@ class cPremiumHandler:
             req.add_header('Referer', url)
         
         req.add_header('Cookie', cookies)
-        
+
         try:
             response = urllib2.urlopen(req)
         except urllib2.URLError, e:
