@@ -3,6 +3,7 @@ from resources.lib.parser import cParser
 from resources.lib.config import cConfig
 from resources.hosters.hoster import iHoster
 from resources.lib.gui.gui import cGui
+
 from resources.lib.handler.premiumHandler import cPremiumHandler
 
 import urllib,urllib2
@@ -89,20 +90,21 @@ class cHoster(iHoster):
 
         url = 'https://1fichier.com/?' + self.__getIdFromUrl(self.__sUrl)
         
-        Mode = ''
+        #Mode = ''
         #Mode = {'dl_no_ssl' : 'on' , 'dlinline' : 'on'}
-        Mode = {'dl_no_ssl' : 'on' }
-        postdata = urllib.urlencode( Mode )
+        #Mode = {'dl_no_ssl' : 'on' }
+        #postdata = urllib.urlencode( Mode )
         
-        #req = urllib2.Request(url,postdata,headers)
-        
-        sHtmlContent = self.oPremiumHandler.GetHtml(url,postdata)   
-        
+        #Pas de page html mais lien direct
+        #sHtmlContent = self.oPremiumHandler.GetHtml(url,postdata)
         #fh = open('c:\\test.txt', "w")
         #fh.write(sHtmlContent)
-        #fh.close()
+        #fh.close()        
         
-        api_call = self.GetMedialinkDL(sHtmlContent)
+        #mode inline
+        #url = url + '&inline'
+        
+        api_call = url + '|' + self.oPremiumHandler.AddCookies()
         
         #print api_call
         
