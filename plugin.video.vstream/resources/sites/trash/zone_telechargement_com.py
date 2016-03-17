@@ -41,8 +41,13 @@ MOVIE_GENRES = (True, 'showGenre')
 #MOVIE_VF = (URL_MAIN + 'langues/french', 'showMovies') # films VF
 MOVIE_VOSTFR = (URL_MAIN + 'langues/vostfr', 'showMovies') # films VOSTFR
 MOVIE_ANIME = (URL_MAIN + 'dessins-animes.html', 'showMovies') # dessins animes
+
 SERIE_VF = (URL_MAIN + 'series-vf.html', 'showMovies') # serie VF
 SERIE_VOSTFR = (URL_MAIN + 'series-vostfr.html', 'showMovies') # serie VOSTFR
+
+ANIM_VFS = (URL_MAIN + 'animes-vf.html', 'showMovies')
+ANIM_VOSTFRS = (URL_MAIN + 'animes-vostfr.html', 'showMovies')
+
 BLURAY_NEWS = (URL_MAIN + 'films-bluray-hd.html', 'showMovies') # derniers Blu-Rays
 #SERIE_GENRE = (True, 'showGenre')
 DOCU_NEWS = (URL_MAIN + 'documentaires-gratuit.html', 'showMovies') # derniers docu
@@ -96,6 +101,14 @@ def load():
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', SERIE_VOSTFR[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_VOSTFR[1], 'Dernieres Series VOSTFR ajoutées', 'series.png', oOutputParameterHandler)
+    
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', ANIM_VFS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_VFS[1], 'Animes VF', 'series.png', oOutputParameterHandler)
+    
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', ANIM_VOSTFRS[0])
+    oGui.addDir(SITE_IDENTIFIER, ANIM_VOSTFRS[1], 'Animes VOSTFR', 'series.png', oOutputParameterHandler)
     
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DOCU_NEWS[0])
@@ -183,11 +196,13 @@ def showMovies(sSearch = ''):
         #print "ZT:showmovies"
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl') 
-   
+        
+    #print sUrl
+    
     oRequestHandler = cRequestHandler(sUrl) 
     sHtmlContent = oRequestHandler.request() 
     #sHtmlContent = sHtmlContent.replace('<span class="tr-dublaj"></span>', '').replace('<span class="tr-altyazi"></span>','')
-    if 'series' in sUrl or 'documentaires' in sUrl or 'emissions' in sUrl :
+    if 'series' in sUrl or 'documentaires' in sUrl or 'emissions' in sUrl or 'spectacles' in sUrl or 'animes-' in sUrl:
         sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^<>"]+?)" ><img class=.+?src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0" .+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href=".+?" >(.+?)<'
     else:
         sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0"[^"]+?"Note spectateurs" style="[^"]+?"><img src="[^"]+?" border="0">[^<]+?</div><div style=""><div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?"[^>]+?>([^<]+?) <span class="detail_release size_11">'
@@ -205,8 +220,7 @@ def showMovies(sSearch = ''):
     if (aResult[0] == True):
         total = len(aResult[1])        
         for aEntry in aResult[1]:
-                        
-            #L'array affiche vos info dans l'orde de sPattern en commencant a 0
+
             sTitle = str(aEntry[2])
             sUrl = aEntry[0]
             sFanart =aEntry[1]
@@ -215,9 +229,9 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler.addParameter('siteUrl', str(sUrl)) 
             oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle)) 
             oOutputParameterHandler.addParameter('disp', 'search1')
-            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail) #sortie du poster
+            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
             
-            if 'series' in sUrl:
+            if 'series' in sUrl or 'animes-' in sUrl or 'mangas-' in sUrl:
                 oGui.addTV(SITE_IDENTIFIER, 'showSeriesLinks', sTitle, 'series.png', sThumbnail, sFanart, oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showLinks', sTitle, 'films.png', sThumbnail, sFanart, oOutputParameterHandler)
@@ -227,7 +241,6 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', 'next.png', oOutputParameterHandler)
-            #Ajoute une entree pour le lien Next | pas de addMisc pas de poster et de description inutile donc
 
     #test pr chnagement mode
     xbmc.executebuiltin('Container.SetViewMode(500)')
@@ -310,6 +323,8 @@ def showSeriesLinks():
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
     #print "ZT:showSeriesLinks"
+    
+    #print sUrl
 	
     oRequestHandler = cRequestHandler(sUrl) #requete sur l'url
     sHtmlContent = oRequestHandler.request()
@@ -326,21 +341,26 @@ def showSeriesLinks():
 	
     
 	#on recherche d'abord la qualité courante
+    sQual = ''
 
-    sPattern = '<span style="color:#[0-9a-z]{6}"><b>\[[^\]]+?\] ([^<]+?)</b></span>'
+    sPattern = '<span style="color:#[0-9a-z]{6}"><b> *\[[^\]]+?\] ([^<]+?)</b></span>'
     aResult = oParser.parse(sHtmlContent, sPattern)
     #print aResult
     if (aResult[0] == False):
         oParser = cParser()
         sPattern = '<span style="color:#[0-9a-z]{6}"><b><strong>\[[^\]]+?\] ([^<]+?)</strong></b></span>'
         aResult = oParser.parse(sHtmlContent, sPattern)
-        #print aResult   
+        #print aResult
+    
+    if (aResult[1]):
+        sQual = aResult[1][0]
 	
     dialog = cConfig().createDialog(SITE_NAME)
 	
-    oGui.addText('','[COLOR olive]'+'Qualités disponibles pour cette saison :'+'[/COLOR]')
+    oGui.addText(SITE_IDENTIFIER,'[COLOR olive]'+'Qualités disponibles pour cette saison :'+'[/COLOR]')
 	
-    sDisplayTitle = cUtil().DecoTitle(sMovieTitle) +  ' - [COLOR skyblue]' + aResult[1][0] + '[/COLOR]'
+    sDisplayTitle = cUtil().DecoTitle(sMovieTitle) +  ' - [COLOR skyblue]' + sQual + '[/COLOR]'
+    
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('sUrl', sUrl)
     oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
@@ -368,7 +388,7 @@ def showSeriesLinks():
             oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
             oGui.addMovie(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)             
     
-        oGui.addText('','[COLOR olive]'+'Saisons aussi disponibles pour cette série :'+'[/COLOR]')
+        oGui.addText(SITE_IDENTIFIER,'[COLOR olive]'+'Saisons aussi disponibles pour cette série :'+'[/COLOR]')
     
     oParser = cParser()
     sPattern2 = '<a title="Téléchargez[^"]+?" href="([^"]+?)"><button class="button_subcat" style="font-size: 12px;height: 26px;width:190px;color:666666;letter-spacing:0.05em">([^<]+?)</button>'
@@ -407,7 +427,7 @@ def showHosters():# recherche et affiche les hotes
     sUrl = oInputParameterHandler.getValue('sUrl')
     sThumbnail=oInputParameterHandler.getValue('sThumbnail')
     
-    print sUrl
+    #print sUrl
     
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -422,7 +442,7 @@ def showHosters():# recherche et affiche les hotes
     sPattern = '<span style="color:#.{6}">([^>]+?)<\/span>(?:.(?!color))+?<a href="([^<>"]+?)" target="_blank">Télécharger<\/a>|>\[(Liens Premium) \]<'
     aResult = oParser.parse(sHtmlContent, sPattern)
     
-    print aResult
+    #print aResult
         
     if (aResult[0] == True):
         total = len(aResult[1])
