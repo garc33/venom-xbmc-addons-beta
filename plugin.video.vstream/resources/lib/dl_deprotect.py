@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from resources.lib.gui.gui import cGui
 from time import time
+from socket import timeout
 import base64
 import urllib2,urllib,re
 
@@ -136,10 +137,18 @@ def DecryptDlProtect(url):
     
     request = urllib2.Request(url,None,headers)
     try: 
-        reponse = urllib2.urlopen(request)
+        reponse = urllib2.urlopen(request,timeout = 5)
     except urllib2.URLError, e:
         print e.read()
         print e.reason
+        return ''
+    except urllib2.HTTPError, e:
+        print e.read()
+        print e.reason
+        return ''
+    except timeout:
+        print 'timeout'
+        cGui().showInfo("Erreur", 'Site Dl-Protect HS' , 5)
         return ''
     
     #Si redirection
@@ -149,6 +158,12 @@ def DecryptDlProtect(url):
         return UrlRedirect
         
     sHtmlContent = reponse.read()
+    
+    #site out ?
+    if 'A technical problem occurred' in sHtmlContent:
+        print 'Dl-protect HS'
+        cGui().showInfo("Erreur", 'Site Dl-Protect HS' , 5)
+        return ''
     
     #Recuperatioen et traitement cookies ???
     cookies=reponse.info()['Set-Cookie']
