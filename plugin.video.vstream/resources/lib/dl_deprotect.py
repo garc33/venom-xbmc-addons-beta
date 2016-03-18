@@ -139,10 +139,12 @@ def DecryptDlProtect(url):
     try: 
         reponse = urllib2.urlopen(request,timeout = 5)
     except urllib2.URLError, e:
+        cGui().showInfo("Erreur", 'Site Dl-Protect HS' , 5)
         print e.read()
         print e.reason
         return ''
     except urllib2.HTTPError, e:
+        cGui().showInfo("Erreur", 'Site Dl-Protect HS' , 5)
         print e.read()
         print e.reason
         return ''
