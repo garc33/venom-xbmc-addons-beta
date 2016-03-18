@@ -200,14 +200,16 @@ def showMovies(sSearch = ''):
     print sUrl
     
     oRequestHandler = cRequestHandler(sUrl) 
-    sHtmlContent = oRequestHandler.request() 
-    #sHtmlContent = sHtmlContent.replace('<span class="tr-dublaj"></span>', '').replace('<span class="tr-altyazi"></span>','')
-    if 'series' in sUrl or 'documentaires' in sUrl or 'emissions' in sUrl or 'spectacles' in sUrl or 'animes-' in sUrl or 'genre' in sUrl:
-        #sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^<>"]+?)" ><img class=.+?src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0" .+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href=".+?" >(.+?)<'
-        sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+).+?><img class=.+?src="([^<"]+)".+?<div class="cover_infos_global toh"><div class="cover_infos_title[^>]+><a title="" href=".+?>(.+?)<'
-    else:
-        #sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0"[^"]+?"Note spectateurs" style="[^"]+?"><img src="[^"]+?" border="0">[^<]+?</div><div style=""><div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?"[^>]+?>([^<]+?) <span class="detail_release size_11">'
-        sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<"]+)".+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?[^>]+?>([^<]+?) <span class="detail_release size_11">'
+    sHtmlContent = oRequestHandler.request()
+    
+    # if 'series' in sUrl or 'documentaires' in sUrl or 'emissions' in sUrl or 'spectacles' in sUrl or 'animes-' in sUrl or 'genre' in sUrl:
+        # #sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^<>"]+?)" ><img class=.+?src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0" .+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href=".+?" >(.+?)<'
+        # sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+).+?><img class=.+?src="([^<"]+)".+?<div class="cover_infos_global toh"><div class="cover_infos_title[^>]+><a title="" href=".+?>(.+?)<'
+    # else:
+        # #sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<]+)" width="[0-9]{3}" height="[0-9]{3}" border="0"[^"]+?"Note spectateurs" style="[^"]+?"><img src="[^"]+?" border="0">[^<]+?</div><div style=""><div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?"[^>]+?>([^<]+?) <span class="detail_release size_11">'
+        # sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+?)"[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<"]+)".+?<div class="cover_infos_global toh"><div class="cover_infos_title"><a title="" href="[^"]+?[^>]+?>([^<]+?) <span class="detail_release size_11">'
+    
+    sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+)[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<"]+)".+?<a title="" href[^>]+?>([^<]+?)<'
     
 	#pour faire simple recherche ce bout de code dans le code source de l'url
     #- ([^<]+) je veut cette partie de code mais y a une suite
@@ -233,7 +235,8 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler.addParameter('disp', 'search1')
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
             
-            if 'series' in sUrl or 'animes-' in sUrl or 'mangas-' in sUrl or 'Saison' in sTitle:
+            check = sUrl.split('/')[3]
+            if ('series' in check) or ('animes' in check) or ('saison' in check):
                 oGui.addTV(SITE_IDENTIFIER, 'showSeriesLinks', sTitle, 'series.png', sThumbnail, sFanart, oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showLinks', sTitle, 'films.png', sThumbnail, sFanart, oOutputParameterHandler)
@@ -584,17 +587,10 @@ def Cutlink(sHtmlContent):
 def CutNonPremiumlinks(sHtmlContent):
     print "ZT:CutNonPremiumlinks"
     oParser = cParser()
-    sPattern = 'Lien Premium (.+?)Publié le '
+    sPattern = '(?i)Liens* Premium (.+?)Publié le '
     aResult = oParser.parse(sHtmlContent, sPattern)
     print aResult
     if (aResult[0]):
         return aResult[1][0]
-    else:
-        sPattern = 'Liens PREMIUM (.+?)Publié le '
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        print aResult
-        if (aResult[0]):
-            return aResult[1][0]
     
-        return ''
-    
+    return ''
