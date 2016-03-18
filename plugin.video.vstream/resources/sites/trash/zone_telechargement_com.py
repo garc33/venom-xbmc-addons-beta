@@ -130,7 +130,7 @@ def showSearchMovies():
     #print 'ZT:showSearch'
     sSearchText = oGui.showKeyBoard() 
     if (sSearchText != False):
-        sUrl = URL_SEARCH_MOVIES[0] + sSearchText +'&tab=all&orderby_by=date&orderby_order=desc&displaychangeto=thumb'
+        sUrl = URL_SEARCH_MOVIES[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
         #print sUrl
         showMovies(sUrl) 
         oGui.setEndOfDirectory()
@@ -141,7 +141,7 @@ def showSearchSeries():
     #print 'ZT:showSearch'
     sSearchText = oGui.showKeyBoard() 
     if (sSearchText != False):
-        sUrl = URL_SEARCH_SERIES[0] + sSearchText +'&tab=all&orderby_by=date&orderby_order=desc&displaychangeto=thumb'
+        sUrl = URL_SEARCH_SERIES[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
         #print sUrl
         showMovies(sUrl) 
         oGui.setEndOfDirectory()
