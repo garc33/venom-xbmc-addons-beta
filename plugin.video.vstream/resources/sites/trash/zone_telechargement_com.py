@@ -296,10 +296,6 @@ def showMoviesLinks(sHtmlContent):
    
     oParser = cParser()
     
-    fh = open('c:\\test.txt', "w")
-    fh.write(sHtmlContent)
-    fh.close()
-    
     #Recuperation infos
     sNote = ''
     sCom = ''
