@@ -10,7 +10,6 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.db import cDb
 from resources.lib.util import cUtil
 
-
 import urllib2,urllib
 import xbmcplugin, xbmc
 import xbmcgui
@@ -93,7 +92,6 @@ class cDownloadProgressBar(threading.Thread):
             iTotalSize = int(headers["Content-Length"])
         
         chunk = 16 * 1024
-        
         TotDown = 0
         
         #mise a jour pour info taille
@@ -103,7 +101,10 @@ class cDownloadProgressBar(threading.Thread):
         while not (self.processIsCanceled or diag.isFinished()):
             
             data = self.oUrlHandler.read(chunk)
-            if not data: break
+            if not data:
+                print 'DL err'
+                break
+                
             self.file.write(data)
             TotDown = TotDown + data.__len__()
             self.__updatedb(TotDown,iTotalSize)
@@ -116,7 +117,7 @@ class cDownloadProgressBar(threading.Thread):
                                 
             #petite pause, ca ralentit le download mais evite de bouffer 100/100 ressources
             if not (self.__bFastMode):
-                xbmc.sleep(300)
+                xbmc.sleep(300)     
         
         self.oUrlHandler.close()
         self.file.close()
@@ -192,10 +193,21 @@ class cDownloadProgressBar(threading.Thread):
     def run(self):
         
         try:
-            #1 seul header a l'air necessaire pour le moment
-            headers = { 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36' }
+            #Recuperation url simple
             url = self.__sUrl.split('|')[0]
+            
+            #Recuperation des headers du lien
+            try:
+                headers = dict([item.split('=') for item in (ur.split('|')[1]).split('&')])
+            except:
+                headers = {}
+            #Rajout du user-agent si abscent
+            if not ('User-Agent' in headers):
+                headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+            #print headers
+            
             req = urllib2.Request(url, None, headers)
+
             self.oUrlHandler = urllib2.urlopen(req,timeout=30)
             #self.__instance = repr(self)
             self.file = xbmcvfs.File(self.__fPath, 'w')
