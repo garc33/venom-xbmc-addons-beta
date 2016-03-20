@@ -22,7 +22,7 @@ from resources.lib.dl_deprotect import DecryptDlProtect
 
 
 SITE_IDENTIFIER = 'zone_telechargement_com' 
-SITE_NAME = 'Zone-Telechargement.com' 
+SITE_NAME = '[COLOR violet]Zone-telechargement[/COLOR]' 
 SITE_DESC = '' 
 
 URL_MAIN = 'http://www.zone-telechargement.com/'
@@ -268,6 +268,8 @@ def showLinks():
 
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
+    
+    print sUrl
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
@@ -445,15 +447,20 @@ def showHosters():# recherche et affiche les hotes
     sUrl = oInputParameterHandler.getValue('sUrl')
     sThumbnail=oInputParameterHandler.getValue('sThumbnail')
     
-    #print sUrl
+    print sUrl
     
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     
     #Fonction pour recuperer uniquement les liens
-    sHtmlContent = Cutlink(sHtmlContent)
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
 	    sHtmlContent = CutNonPremiumlinks(sHtmlContent)
+    else:
+        sHtmlContent = Cutlink(sHtmlContent)
+        
+    #fh = open('c:\\test.txt', "w")
+    #fh.write(sHtmlContent)
+    #fh.close()
     
     oParser = cParser()
     
@@ -499,13 +506,15 @@ def showSeriesHosters():# recherche et affiche les hotes
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sUrl = oInputParameterHandler.getValue('sUrl')
     sThumbnail=oInputParameterHandler.getValue('sThumbnail')
-    print sUrl
     
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
     
     #Fonction pour recuperer uniquement les liens
-    sHtmlContent = Cutlink(sHtmlContent)
+    if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
+	    sHtmlContent = CutNonPremiumlinks(sHtmlContent)
+    else:
+        sHtmlContent = Cutlink(sHtmlContent)
    
     oParser = cParser()
     
@@ -559,36 +568,43 @@ def Display_protected_link():
     sThumbnail=oInputParameterHandler.getValue('sThumbnail')
 
     oParser = cParser()
-    
-    sHtmlContent = DecryptDlProtect(sUrl)
-    #print sHtmlContent
-    
-    if sHtmlContent:
-
-        sPattern_dlprotect = '><a href="(.+?)" target="_blank">'
-        aResult_dlprotect = oParser.parse(sHtmlContent, sPattern_dlprotect)
-        print aResult_dlprotect
+    #Est ce un lien dl-protect ?
+    if 'dl-protect' in sUrl:
+        sHtmlContent = DecryptDlProtect(sUrl)
         
-        if (aResult_dlprotect[0]):
+        if sHtmlContent:
+
+            sPattern_dlprotect = '><a href="(.+?)" target="_blank">'
+            aResult_dlprotect = oParser.parse(sHtmlContent, sPattern_dlprotect)
             
-            episode = 1
+    #Si lien normal       
+    else:
+        if not sUrl.startswith('http'):
+            sUrl = 'http://' + sUrl
+        aResult_dlprotect = (True, [sUrl]) 
+        
+    print aResult_dlprotect
+        
+    if (aResult_dlprotect[0]):
             
-            for aEntry in aResult_dlprotect[1]:
-                sHosterUrl = aEntry
-                #print sHosterUrl
-                
-                sTitle = sMovieTitle
-                if len(aResult_dlprotect[1]) > 1:
-                    sTitle = sMovieTitle + ' episode ' + str(episode)
-                
-                episode+=1
-                
-                oHoster = cHosterGui().checkHoster(sHosterUrl)
-                if (oHoster != False):
-                    sDisplayTitle = cUtil().DecoTitle(sTitle)
-                    oHoster.setDisplayName(sDisplayTitle)
-                    oHoster.setFileName(sTitle)
-                    cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
+        episode = 1
+        
+        for aEntry in aResult_dlprotect[1]:
+            sHosterUrl = aEntry
+            #print sHosterUrl
+            
+            sTitle = sMovieTitle
+            if len(aResult_dlprotect[1]) > 1:
+                sTitle = sMovieTitle + ' episode ' + str(episode)
+            
+            episode+=1
+            
+            oHoster = cHosterGui().checkHoster(sHosterUrl)
+            if (oHoster != False):
+                sDisplayTitle = cUtil().DecoTitle(sTitle)
+                oHoster.setDisplayName(sDisplayTitle)
+                oHoster.setFileName(sTitle)
+                cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
                         
     oGui.setEndOfDirectory()
     
@@ -597,7 +613,7 @@ def Cutlink(sHtmlContent):
     oParser = cParser()
     sPattern = '<img src="http:\/\/www\.zone-telechargement\.com\/prez\/style\/v1\/liens\.png"(.+?)<div class="divinnews"'
     aResult = oParser.parse(sHtmlContent, sPattern)
-    print aResult
+    #print aResult
     if (aResult[0]):
         return aResult[1][0]
     
@@ -606,9 +622,9 @@ def Cutlink(sHtmlContent):
 def CutNonPremiumlinks(sHtmlContent):
     print "ZT:CutNonPremiumlinks"
     oParser = cParser()
-    sPattern = '(?i)Liens* Premium (.+?)Publié le '
+    sPattern = '(?i)Liens* Premium(.+?)Publié le '
     aResult = oParser.parse(sHtmlContent, sPattern)
-    print aResult
+    #print aResult
     if (aResult[0]):
         return aResult[1][0]
     
