@@ -169,9 +169,18 @@ def DecryptDlProtect(url):
     
     #Recuperatioen et traitement cookies ???
     cookies=reponse.info()['Set-Cookie']
-    c2 = re.findall('__cfduid=(.+?); .+? cu=(.+?);.+?PHPSESSID=(.+?);',cookies)
-    cookies = '__cfduid=' + str(c2[0][0]) + ';cu=' + str(c2[0][1]) + ';PHPSESSID=' + str(c2[0][2])
-    
+    #print cookies
+    c2 = re.findall('(?:^|,) *([^;,]+?)=([^;,\/]+?);',cookies)
+
+    if not c2:
+        print 'Probleme de cookies'
+        return ''
+    cookies = ''
+    for cook in c2:
+        cookies = cookies + cook[0] + '=' + cook[1]+ ';'
+        
+    #print cookies
+
     reponse.close()
       
     #fh = open('c:\\test.txt', "w")
