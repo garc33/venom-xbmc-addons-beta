@@ -27,6 +27,7 @@ URL_MAIN = 'http://www.hd-stream.in/'
 MOVIE_NEWS = (URL_MAIN + 'index.php', 'showMovies')
 MOVIE_MOVIE = (URL_MAIN + 'films.php', 'showMovies')
 MOVIE_VIEWS = (URL_MAIN + 'top.php', 'showMovies')
+MOVIE_HD = (URL_MAIN + 'films.php', 'showMovies')
  
 MOVIE_GENRES = (True, 'showGenre')
  
