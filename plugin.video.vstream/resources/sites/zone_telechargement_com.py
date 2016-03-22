@@ -69,7 +69,7 @@ def load():
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_EXCLUS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_EXCLUS[1], 'Exclus (Films populaires)', 'news.png', oOutputParameterHandler)
-	
+    
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_NEWS[1], 'Derniers Films ajoutes', 'news.png', oOutputParameterHandler)
@@ -211,7 +211,7 @@ def showMovies(sSearch = ''):
     
     sPattern = '<div style="height:[0-9]{3}px;"><a title="" href="([^"]+)[^>]+?><img class="[^"]+?" data-newsid="[^"]+?" src="([^<"]+)".+?<a title="" href[^>]+?>([^<]+?)<'
     
-	#pour faire simple recherche ce bout de code dans le code source de l'url
+    #pour faire simple recherche ce bout de code dans le code source de l'url
     #- ([^<]+) je veut cette partie de code mais y a une suite
     #- .+? je ne veut pas cette partis et peux importe ceux qu'elle contient
     #- (.+?) je veut cette partis et c'est la fin
@@ -301,6 +301,7 @@ def showMoviesLinks(sHtmlContent):
     #Recuperation infos
     sNote = ''
     sCom = ''
+    sBA = ''
     sPattern = 'itemprop="ratingValue">([0-9,]+)<\/span>.+?synopsis\.png" *\/*>(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
@@ -311,6 +312,16 @@ def showMoviesLinks(sHtmlContent):
         
     if (sNote):
         oGui.addText(SITE_IDENTIFIER,'Note : ' + str(sNote))
+        
+    sPattern = '(http:\/\/www\.zone-telechargement\.com\/engine\/ba\.php\?id=[0-9]+)'
+    aResult = oParser.parse(sHtmlContent, sPattern)
+    if (aResult[0]):
+        sBA = aResult[1][0]
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('sUrl',sBA)
+        oOutputParameterHandler.addParameter('sMovieTitle', 'Bande annonce')
+        oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+        oGui.addMovie(SITE_IDENTIFIER, 'ShowBA', 'Bande annonce', '', sThumbnail, '', oOutputParameterHandler)
     
     oGui.addText(SITE_IDENTIFIER,'[COLOR olive]Qualités disponibles pour ce film :[/COLOR]')
     
@@ -330,12 +341,12 @@ def showMoviesLinks(sHtmlContent):
     oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
     oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
     oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, '', sThumbnail, sCom, oOutputParameterHandler)
-	
+    
     #on regarde si dispo dans d'autres qualités
     sPattern = '<a title="Téléchargez.+?en (.+?)" href="(.+?)"><button class="button_subcat"'
     aResult = oParser.parse(sHtmlContent, sPattern)
     #print aResult
-	
+    
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
@@ -378,8 +389,8 @@ def showSeriesLinks(sHtmlContent):
     sMovieTitle = sMovieTitle.replace('[Complete]','').replace('[Complète]','')
     
     oGui.addText(SITE_IDENTIFIER,'[COLOR olive]Qualités disponibles pour cette saison :[/COLOR]')
-	
-	#on recherche d'abord la qualité courante
+    
+    #on recherche d'abord la qualité courante
     sPattern = '<span style="color:#[0-9a-z]{6}"><b>(?:<strong>)* *\[[^\]]+?\] ([^<]+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
     #print aResult
@@ -395,7 +406,7 @@ def showSeriesLinks(sHtmlContent):
     oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
     oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
     oGui.addMovie(SITE_IDENTIFIER, 'showSeriesHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
-	
+    
     #on regarde si dispo dans d'autres qualités
     sPattern1 = '<a title="Téléchargez.+?en ([^"]+?)" href="([^"]+?)"><button class="button_subcat"'
     aResult1 = oParser.parse(sHtmlContent, sPattern1)
@@ -423,10 +434,10 @@ def showSeriesLinks(sHtmlContent):
     sPattern2 = '<a title="Téléchargez[^"]+?" href="([^"]+?)"><button class="button_subcat" style="font-size: 12px;height: 26px;width:190px;color:666666;letter-spacing:0.05em">([^<]+?)</button>'
     aResult2 = oParser.parse(sHtmlContent, sPattern2)
     #print aResult2
-	
+    
     if (aResult2[0] == True):
         oGui.addText(SITE_IDENTIFIER,'[COLOR olive]Saisons aussi disponibles pour cette série :[/COLOR]')
-	
+    
         for aEntry in aResult2[1]:
 
             sTitle = '[COLOR skyblue]' + aEntry[1]+'[/COLOR]'
@@ -436,7 +447,7 @@ def showSeriesLinks(sHtmlContent):
             oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))            
             oGui.addTV(SITE_IDENTIFIER, 'showLinks', sTitle, 'series.png', sThumbnail, '', oOutputParameterHandler)
 
-    oGui.setEndOfDirectory()  	
+    oGui.setEndOfDirectory()    
  
 def showHosters():# recherche et affiche les hotes
     #print "ZT:showHosters"
@@ -454,7 +465,7 @@ def showHosters():# recherche et affiche les hotes
     
     #Fonction pour recuperer uniquement les liens
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
-	    sHtmlContent = CutNonPremiumlinks(sHtmlContent)
+        sHtmlContent = CutNonPremiumlinks(sHtmlContent)
     else:
         sHtmlContent = Cutlink(sHtmlContent)
         
@@ -464,7 +475,7 @@ def showHosters():# recherche et affiche les hotes
     
     oParser = cParser()
     
-    sPattern = '<span style="color:#.{6}">([^>]+?)<\/span>(?:.(?!color))+?<a href="([^<>"]+?)" target="_blank">Télécharger<\/a>|>\[(Liens Premium) \]<'
+    sPattern = '<span style="color:#.{6}">([^>]+?)<\/span>(?:.(?!color))+?<a href="([^<>"]+?)" target="_blank">Télécharger<\/a>|>\[(Liens Premium) \]<|<span style="color:#FF0000">([^<]+)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
     
     #print aResult
@@ -472,7 +483,7 @@ def showHosters():# recherche et affiche les hotes
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
-		
+        
         for aEntry in aResult[1]:
             cConfig().updateDialog(dialog, total)
             if dialog.iscanceled():
@@ -487,6 +498,14 @@ def showHosters():# recherche et affiche les hotes
                     oGui.addText(SITE_IDENTIFIER, '[COLOR olive]'+str(aEntry[2])+'[/COLOR]')
                 else:
                     oGui.addText(SITE_IDENTIFIER, '[COLOR red]'+str(aEntry[2])+'[/COLOR]')
+                    
+            elif aEntry[3]:
+                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
+                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
+                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                oGui.addText(SITE_IDENTIFIER, '[COLOR olive]'+str(aEntry[3])+'[/COLOR]')
+                
             else:
                 sTitle = '[COLOR skyblue]' + aEntry[0]+ '[/COLOR] ' + sMovieTitle
                 oOutputParameterHandler = cOutputParameterHandler()
@@ -512,7 +531,7 @@ def showSeriesHosters():# recherche et affiche les hotes
     
     #Fonction pour recuperer uniquement les liens
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
-	    sHtmlContent = CutNonPremiumlinks(sHtmlContent)
+        sHtmlContent = CutNonPremiumlinks(sHtmlContent)
     else:
         sHtmlContent = Cutlink(sHtmlContent)
    
@@ -525,7 +544,7 @@ def showSeriesHosters():# recherche et affiche les hotes
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
-		
+        
         for aEntry in aResult[1]:
             cConfig().updateDialog(dialog, total)
             #print aEntry
@@ -583,7 +602,7 @@ def Display_protected_link():
             sUrl = 'http://' + sUrl
         aResult_dlprotect = (True, [sUrl]) 
         
-    print aResult_dlprotect
+    #print aResult_dlprotect
         
     if (aResult_dlprotect[0]):
             
@@ -627,5 +646,15 @@ def CutNonPremiumlinks(sHtmlContent):
     #print aResult
     if (aResult[0]):
         return aResult[1][0]
+
+    #Si ca marche pas on essaye sans premium
+    return Cutlink(sHtmlContent)
+
+def ShowBA():
+    oInputParameterHandler = cInputParameterHandler()
+    sUrl = oInputParameterHandler.getValue('sUrl')
     
-    return ''
+    oRequestHandler = cRequestHandler(sUrl)
+    sHtmlContent = oRequestHandler.request()
+    
+    return
