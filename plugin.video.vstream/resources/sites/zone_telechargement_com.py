@@ -464,10 +464,10 @@ def showHosters():# recherche et affiche les hotes
     sHtmlContent = oRequestHandler.request()
     
     #Fonction pour recuperer uniquement les liens
+    sHtmlContent = Cutlink(sHtmlContent)
+    #Si ca ressemble aux lien premiums on vire les liens non premium
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
         sHtmlContent = CutNonPremiumlinks(sHtmlContent)
-    else:
-        sHtmlContent = Cutlink(sHtmlContent)
         
     #fh = open('c:\\test.txt', "w")
     #fh.write(sHtmlContent)
@@ -530,10 +530,10 @@ def showSeriesHosters():# recherche et affiche les hotes
     sHtmlContent = oRequestHandler.request()
     
     #Fonction pour recuperer uniquement les liens
+    sHtmlContent = Cutlink(sHtmlContent)
+    #Si ca ressemble aux lien premiums on vire les liens non premium
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
         sHtmlContent = CutNonPremiumlinks(sHtmlContent)
-    else:
-        sHtmlContent = Cutlink(sHtmlContent)
    
     oParser = cParser()
     
@@ -647,8 +647,8 @@ def CutNonPremiumlinks(sHtmlContent):
     if (aResult[0]):
         return aResult[1][0]
 
-    #Si ca marche pas on essaye sans premium
-    return Cutlink(sHtmlContent)
+    #Si ca marche pas on renvois le code complet
+    return sHtmlContent
 
 def ShowBA():
     oInputParameterHandler = cInputParameterHandler()
@@ -656,5 +656,41 @@ def ShowBA():
     
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
+    
+    oParser = cParser()
+    sPattern = 'src="(http[^"]+)"'
+    aResult = oParser.parse(sHtmlContent, sPattern)
+    
+    if (aResult[0]):
+        oRequestHandler = cRequestHandler(aResult[1][0])
+        sHtmlContent = oRequestHandler.request()
+        
+        sPattern = 'player_gen_cmedia=(.*?)&cfilm'
+        aResult = oParser.parse(sHtmlContent, sPattern)
+        
+        if (aResult[0]):
+            url2 = 'http://www.allocine.fr/ws/AcVisiondataV4.ashx?media=%s' % (aResult[1][0])
+            oRequestHandler = cRequestHandler(url2)
+            sHtmlContent = oRequestHandler.request()
+            
+            sPattern = 'md_path="([^"]+)"'
+            aResult = oParser.parse(sHtmlContent, sPattern)
+            
+            if (aResult[0]):
+                video = aResult[1][0]
+                #print video
+                
+                import xbmcplugin
+                import sys
+                
+                __handle__ = int(sys.argv[1])
+                #from resources.lib.handler.pluginHandler import cPluginHandler
+                #__handle__ = cPluginHandler().getPluginHandle()
+
+                liz=xbmcgui.ListItem('Voir la bande annonce', iconImage="DefaultVideo.png")
+                liz.setInfo( type="Video", infoLabels={ "Title": 'nom' } )
+                liz.setProperty('IsPlayable', 'true')
+                xbmcplugin.addDirectoryItem(handle=__handle__,url=video,listitem=liz)
+                xbmcplugin.endOfDirectory(__handle__)
     
     return
