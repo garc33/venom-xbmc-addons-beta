@@ -198,13 +198,12 @@ class cDownloadProgressBar(threading.Thread):
             
             #Recuperation des headers du lien
             try:
-                headers = dict([item.split('=') for item in (ur.split('|')[1]).split('&')])
+                headers = dict([item.split('=') for item in (self.__sUrl.split('|')[1]).split('&')])
             except:
                 headers = {}
             #Rajout du user-agent si abscent
             if not ('User-Agent' in headers):
                 headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
-            #print headers
             
             req = urllib2.Request(url, None, headers)
 
