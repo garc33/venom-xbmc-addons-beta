@@ -302,7 +302,7 @@ def showMoviesLinks(sHtmlContent):
     sNote = ''
     sCom = ''
     sBA = ''
-    sPattern = 'itemprop="ratingValue">([0-9,]+)<\/span>.+?synopsis\.png" *\/*>(.+?)<'
+    sPattern = 'itemprop="ratingValue">([0-9,]+)<\/span>.+?synopsis\.png" *\/*></div><br /><div align="center">(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
 
     if (aResult[0]):
