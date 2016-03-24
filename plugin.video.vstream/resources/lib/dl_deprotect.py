@@ -191,7 +191,11 @@ def DecryptDlProtect(url):
     if '<td align=center> Please enter the characters from the picture to see the links </td>' in sHtmlContent:
         print 'captcha'
         s = re.findall('<img id="captcha" alt="Security code" src="([^<>"]+?)"',sHtmlContent)
-        image = 'http://www.dl-protect.com' + s[0]
+        
+        if 'http://www.dl-protect.com' in s[0]:
+            image = s[0]
+        else:
+            image = 'http://www.dl-protect.com' + s[0]
         
         #print image
         
