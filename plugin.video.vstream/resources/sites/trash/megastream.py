@@ -21,32 +21,58 @@ SITE_DESC = ''
 
 URL_MAIN = 'http://mega-stream.fr/'
 
-MOVIE_NEWS = (URL_MAIN + 'accueil-films', 'showMovies')
-MOVIE_MOVIE = (URL_MAIN + 'accueil-films', 'showMovies')
- 
+MOVIE_NEWS = ('http://mega-stream.fr/fonctions/infinite_scroll.php', 'showMovies')
+MOVIE_MOVIE = ('http://mega-stream.fr/fonctions/infinite_scroll.php', 'showMovies')
 MOVIE_GENRES = (True, 'showGenre')
+
+SERIE_SERIES = ('http://mega-stream.fr/fonctions/infinite_scroll.php', 'showMovies') 
+ANIM_ANIMS = ('http://mega-stream.fr/fonctions/infinite_scroll.php', 'showMovies')
  
-URL_SEARCH = (URL_MAIN + '?s=', 'resultSearch')
+URL_SEARCH = ('http://mega-stream.fr/fonctions/recherche.php', 'showSearch')
 FUNCTION_SEARCH = 'resultSearch'
    
 def load():
     oGui = cGui()
 
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Recherche', 'search.png', oOutputParameterHandler)
- 
+    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
+    oOutputParameterHandler.addParameter('disp', 'search1')
+    oGui.addDir(SITE_IDENTIFIER, URL_SEARCH[1], 'Recherche de Film', 'search.png', oOutputParameterHandler)
+    
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
+    oOutputParameterHandler.addParameter('disp', 'search2')
+    oGui.addDir(SITE_IDENTIFIER, URL_SEARCH[1], 'Recherche de Serie', 'search.png', oOutputParameterHandler)
+
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', URL_SEARCH[0])
+    oOutputParameterHandler.addParameter('disp', 'search3')
+    oGui.addDir(SITE_IDENTIFIER, URL_SEARCH[1], 'Recherche d Animes', 'search.png', oOutputParameterHandler)
+    
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_NEWS[0])
+    oOutputParameterHandler.addParameter('count_tiles_film', '0')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Films Nouveautés', 'news.png', oOutputParameterHandler)
    
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_MOVIE[0])
+    oOutputParameterHandler.addParameter('count_tiles_film', '0')
     oGui.addDir(SITE_IDENTIFIER, 'showMovies', 'Tout Les Films', 'films.png', oOutputParameterHandler)
    
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
+    oOutputParameterHandler.addParameter('count_tiles_film', '0')
     oGui.addDir(SITE_IDENTIFIER, 'showGenre', 'Films Genre', 'genres.png', oOutputParameterHandler)
+    
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', SERIE_SERIES[0])
+    oOutputParameterHandler.addParameter('count_tiles_series', '0')
+    oGui.addDir(SITE_IDENTIFIER, SERIE_SERIES[1], 'Series', 'series.png', oOutputParameterHandler)
+                
+    oOutputParameterHandler = cOutputParameterHandler()
+    oOutputParameterHandler.addParameter('siteUrl', ANIM_ANIMS[0])
+    oOutputParameterHandler.addParameter('count_tiles_mangas', '0')
+    oGui.addDir(SITE_IDENTIFIER, ANIM_ANIMS[1], 'Animes', 'series.png', oOutputParameterHandler)
            
     oGui.setEndOfDirectory()
  
@@ -56,9 +82,8 @@ def showSearch():
  
     sSearchText = oGui.showKeyBoard()
     if (sSearchText != False):
-        sSearchText = cUtil().urlEncode(sSearchText)
-        sUrl = URL_SEARCH[0] + sSearchText 
-        resultSearch(sUrl)
+        sSearchText = sSearchText
+        resultSearch(sSearchText)
         oGui.setEndOfDirectory()
         return
 
@@ -100,13 +125,35 @@ def showGenre():
     oGui.setEndOfDirectory()
     
 def resultSearch(sSearch):
-    oGui = cGui()  
+    oGui = cGui()
+    oInputParameterHandler = cInputParameterHandler()
+    sUrl = oInputParameterHandler.getValue('siteUrl')
+    sDisp = oInputParameterHandler.getValue('disp')
+    
+    print sUrl
+    print sDisp
 
-    sUrl = sSearch
-   
-    oRequestHandler = cRequestHandler(sUrl)
-    sHtmlContent = oRequestHandler.request()
-    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"/>.+?<h3>(.+?)</h3>'
+    post_data = {'searchValue' : sSearch,
+                'smallSearch': 'true' }
+
+    if sDisp == 'search2':
+        post_data['cat_recherche'] = 'series'
+    elif sDisp == 'search3':
+        post_data['cat_recherche'] = 'mangas'
+    else:
+        post_data['cat_recherche'] = 'films'
+        
+    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
+    headers = {'User-Agent': UA ,
+               'Host' : 'mega-stream.fr'}
+                                
+    req = urllib2.Request(sUrl , urllib.urlencode(post_data), headers)
+    
+    response = urllib2.urlopen(req)
+    sHtmlContent = response.read()
+    response.close()
+    
+    sPattern = ''
     
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -119,15 +166,7 @@ def resultSearch(sSearch):
             if dialog.iscanceled():
                 break
 
-            sThumbnail = URL_MAIN+str(aEntry[0])
-            sTitle = str(aEntry[1])
-            #sTitle = sTitle.replace('- Film Complet','')
 
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
-            oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
-            #oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'films.png', sThumbnail, '', oOutputParameterHandler)
         
         cConfig().finishDialog(dialog)
       
@@ -140,33 +179,40 @@ def showMovies(sSearch = ''):
     else:
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl')
-        count_tiles_film = int(oInputParameterHandler.getValue('count_tiles_film'))
+        count_tiles_film = oInputParameterHandler.getValue('count_tiles_film')
+        count_tiles_series = oInputParameterHandler.getValue('count_tiles_series')
+        count_tiles_mangas = oInputParameterHandler.getValue('count_tiles_mangas')
     
-    if 'infinite_scroll.php' in sUrl:
-        UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
-        headers = {'User-Agent': UA ,
-                   'Host' : 'mega-stream.fr'}
-        
-        post_data = {'catLatBar' : 'on',
-                     'count_tiles_film': str(count_tiles_film),
-                     'lat_bar_more_filters': 'dateSortie'}
-                     
-        req = urllib2.Request(sUrl , urllib.urlencode(post_data), headers)
-        
-        response = urllib2.urlopen(req)
-        sHtmlContent = response.read()
-        response.close()
-    else:
-        oRequestHandler = cRequestHandler(sUrl)
-        sHtmlContent = oRequestHandler.request()
+    post_data = {'catLatBar' : 'on',
+             'lat_bar_more_filters': 'dateSortie'}
     
-    #fh = open('c:\\test.txt', "w")
-    #fh.write(sHtmlContent)
-    #fh.close()
+    Spage = '0'
+    if count_tiles_film:
+        Spage = str(count_tiles_film)
+        post_data['count_tiles_film'] = Spage
+        print 'film'
+    elif count_tiles_series:
+        print 'serie'
+        Spage = str(count_tiles_series)
+        post_data['count_tiles_series'] = Spage
+    elif count_tiles_mangas:
+        print 'serie'
+        Spage = str(count_tiles_series)
+        post_data['count_tiles_mangas'] = Spage
+        
+    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
+    headers = {'User-Agent': UA ,
+               'Host' : 'mega-stream.fr'}
+                                
+    req = urllib2.Request(sUrl , urllib.urlencode(post_data), headers)
+    
+    response = urllib2.urlopen(req)
+    sHtmlContent = response.read()
+    response.close()
 
     oParser = cParser()
     
-    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"/>.+?<h3>(.+?)</h3>'
+    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
    
     if (aResult[0] == True):
@@ -179,27 +225,136 @@ def showMovies(sSearch = ''):
            
             sThumbnail = URL_MAIN+str(aEntry[1])
             siteUrl = URL_MAIN+str(aEntry[0])
+            sCom = str(aEntry[3])
 
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[2]))
-            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)            
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', aEntry[2], 'films.png', sThumbnail, '', oOutputParameterHandler)
+            oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
+            if count_tiles_series:
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
+            elif count_tiles_mangas:
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
+            else:
+                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
            
         cConfig().finishDialog(dialog)
  
-        sNextPage = __checkForNextPage(sHtmlContent)
-        if (sNextPage != False):
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            oOutputParameterHandler.addParameter('count_tiles_film', str(count_tiles_film + 20))
-            oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]' , oOutputParameterHandler)
+        #Affichage page suivante
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('siteUrl', sUrl)
+        Spage = str(int(Spage) + 20)
+        if count_tiles_film:
+            oOutputParameterHandler.addParameter('count_tiles_film', Spage)
+        elif count_tiles_series:
+            oOutputParameterHandler.addParameter('count_tiles_series', Spage)
+        elif count_tiles_mangas:
+            oOutputParameterHandler.addParameter('count_tiles_mangas', Spage)
+        oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]' , oOutputParameterHandler)
  
     oGui.setEndOfDirectory()
-         
-def __checkForNextPage(sHtmlContent):
-    return 'http://mega-stream.fr/fonctions/infinite_scroll.php'
- 
+
+def showEpisode():
+    oGui = cGui()
+    oInputParameterHandler = cInputParameterHandler()
+    sUrl = oInputParameterHandler.getValue('siteUrl')
+    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+
+    oRequestHandler = cRequestHandler(sUrl)
+    sHtmlContent = oRequestHandler.request()
+    
+    #fh = open('c:\\test.txt', "w")
+    #fh.write(sHtmlContent)
+    #fh.close()
+
+    sPattern = '<p>(SAISON [0-9]+)<\/p>|<p class="episode_saison(?: episode_select)*" id="([0-9]+)">(Episode [0-9]+)<\/p>'
+    aResult = re.findall(sPattern,sHtmlContent)
+
+    if (aResult):
+        total = len(aResult)
+        dialog = cConfig().createDialog(SITE_NAME)
+        
+        sSaison = ''
+        
+        for aEntry in aResult:
+            cConfig().updateDialog(dialog, total)
+            if dialog.iscanceled():
+                break
+
+            if aEntry[0]:
+                sSaison = aEntry[0]
+                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler.addParameter('siteUrl', str(sUrl))
+                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
+                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                oGui.addText(SITE_IDENTIFIER, '[COLOR olive]'+str(aEntry[0])+'[/COLOR]')
+                
+            else:
+                sTitle = sMovieTitle + ' '+ sSaison + ' ' + aEntry[2]
+                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler.addParameter('sId', aEntry[1])
+                oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
+                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                oGui.addMovie(SITE_IDENTIFIER, 'showSerieHosters', sTitle, '', sThumbnail, '', oOutputParameterHandler)
+
+        cConfig().finishDialog(dialog) 
+
+    oGui.setEndOfDirectory()
+
+def showSerieHosters():
+    oGui = cGui()
+    oInputParameterHandler = cInputParameterHandler()
+
+    sId = oInputParameterHandler.getValue('sId')
+    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+
+    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
+    headers = {'User-Agent': UA ,
+               'Host' : 'mega-stream.fr'}
+    post_data = {'episode_serie' : sId }
+                                
+    req = urllib2.Request('http://mega-stream.fr/lecteur_serie.php' , urllib.urlencode(post_data), headers)
+    
+    response = urllib2.urlopen(req)
+    sHtmlContent = response.read()
+    response.close()
+
+    sPattern = 'class="checkShowlistVidQualite"\/>\s+<p>(.+?)<\/p>|<div class="vidQualite vidSelect" id="([0-9]+)">\s+<img class="video_langue_img" src="IMG\/flag\/(.+?).png"\/>\s+<p>(.+?)<\/p>'
+    aResult = re.findall(sPattern,sHtmlContent)
+
+    if (aResult):
+        total = len(aResult)
+        dialog = cConfig().createDialog(SITE_NAME)
+        for aEntry in aResult:
+            cConfig().updateDialog(dialog, total)
+            if dialog.iscanceled():
+                break
+                
+            sLang = '[VOSTFR] '
+            if 'France' in aEntry[2]:
+                sLang = '[VF] '
+
+            if aEntry[0]:
+                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler.addParameter('sId', str(sId))
+                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
+                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                oGui.addText(SITE_IDENTIFIER, '[COLOR olive]'+str(aEntry[0])+'[/COLOR]')
+                
+            else:
+                sTitle = sLang + '[COLOR skyblue]' + aEntry[3]+ '[/COLOR] ' + sMovieTitle
+                oOutputParameterHandler = cOutputParameterHandler()
+                oOutputParameterHandler.addParameter('sId', aEntry[1])
+                oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
+                oOutputParameterHandler.addParameter('sThumbnail', str(sThumbnail))
+                oGui.addMovie(SITE_IDENTIFIER, 'Getlink', sTitle, '', sThumbnail, '', oOutputParameterHandler)
+
+        cConfig().finishDialog(dialog) 
+
+    oGui.setEndOfDirectory()
+    
 def showHosters():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
@@ -220,6 +375,10 @@ def showHosters():
             cConfig().updateDialog(dialog, total)
             if dialog.iscanceled():
                 break
+                
+            sLang = '[VOSTFR] '
+            if 'France' in aEntry[2]:
+                sLang = '[VF] '
 
             if aEntry[0]:
                 oOutputParameterHandler = cOutputParameterHandler()
@@ -229,7 +388,7 @@ def showHosters():
                 oGui.addText(SITE_IDENTIFIER, '[COLOR olive]'+str(aEntry[0])+'[/COLOR]')
                 
             else:
-                sTitle = '[COLOR skyblue]' + aEntry[3]+ '[/COLOR] ' + sMovieTitle
+                sTitle = sLang + '[COLOR skyblue]' + aEntry[3]+ '[/COLOR] ' + sMovieTitle
                 oOutputParameterHandler = cOutputParameterHandler()
                 oOutputParameterHandler.addParameter('sId', aEntry[1])
                 oOutputParameterHandler.addParameter('sMovieTitle', str(sMovieTitle))
