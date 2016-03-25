@@ -257,6 +257,8 @@ class cHosterGui:
             return cHosterHandler().getHoster('vimple')
         if ('allmyvideos.net' in sHosterUrl):
             return cHosterHandler().getHoster('allmyvideos')
+        if ('idowatch' in sHosterUrl):
+            return cHosterHandler().getHoster('idowatch')
 
         #Lien telechargeable a convertir en stream
         if ('1fichier' in sHosterUrl):
