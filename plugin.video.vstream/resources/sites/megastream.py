@@ -66,7 +66,7 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, MOVIE_HD[1], 'Films HD', 'films.png', oOutputParameterHandler)
    
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0] )
+    oOutputParameterHandler.addParameter('siteUrl', MOVIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, MOVIE_GENRES[1], 'Films Genres', 'genres.png', oOutputParameterHandler)
     
     oOutputParameterHandler = cOutputParameterHandler()
@@ -78,7 +78,7 @@ def load():
     oGui.addDir(SITE_IDENTIFIER, SERIE_HD[1], 'Series HD', 'films.png', oOutputParameterHandler)
     
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', SERIE_GENRES[0] )
+    oOutputParameterHandler.addParameter('siteUrl', SERIE_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, SERIE_GENRES[1], 'Series Genres', 'genres.png', oOutputParameterHandler)
     
     oOutputParameterHandler = cOutputParameterHandler()
@@ -87,10 +87,10 @@ def load():
     
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', ANIM_HD[0] )
-    oGui.addDir(SITE_IDENTIFIER, ANIM_HD[1], 'Animes HD', 'genres.png', oOutputParameterHandler)
+    oGui.addDir(SITE_IDENTIFIER, ANIM_HD[1], 'Animes HD', 'films.png', oOutputParameterHandler)
     
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', ANIM_GENRES[0] )
+    oOutputParameterHandler.addParameter('siteUrl', ANIM_GENRES[0])
     oGui.addDir(SITE_IDENTIFIER, ANIM_GENRES[1], 'Animes Genres', 'genres.png', oOutputParameterHandler)
     
     oGui.setEndOfDirectory()
@@ -147,7 +147,7 @@ def showGenreMovie():
        
     oGui.setEndOfDirectory()
     
- def showGenreSerie():
+def showGenreSerie():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
@@ -199,7 +199,7 @@ def showGenreMovie():
        
     oGui.setEndOfDirectory()
     
- def showGenreAnime():
+def showGenreAnime():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
