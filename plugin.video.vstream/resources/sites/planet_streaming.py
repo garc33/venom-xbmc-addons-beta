@@ -26,7 +26,7 @@ MOVIE_HD = (URL_MAIN + 'xfsearch/hd/', 'showMovies')
  
 MOVIE_GENRES = (True, 'showGenre')
  
-URL_SEARCH = (URL_MAIN , 'showMovies')
+URL_SEARCH = ('' , 'showMovies')
 FUNCTION_SEARCH = 'showMovies'
    
 def load():
@@ -111,18 +111,28 @@ def showMovies(sSearch = ''):
 
         sUrl = URL_SEARCH[0]
         
-        sPOST = 'do=search&subaction=search&story=' + sSearch
-        print sUrl
-        print sPOST
+        #sPOST = 'do=search&subaction=search&story=' + sSearch
+        #print sUrl
+        #print sPOST
         
-        request = urllib2.Request(sUrl,sPOST)
-        request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20100101 Firefox/22.0')
-        request.add_header('Content-Type', 'application/x-www-form-urlencoded')
-        request.add_header('Referer', 'http://www.planet-streaming.com/')
+        oRequestHandler = cRequestHandler(URL_MAIN)
+        oRequestHandler.setRequestType(cRequestHandler.REQUEST_TYPE_POST)
+        #oRequestHandler.addParameters('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20100101 Firefox/22.0')
+        oRequestHandler.addParameters('Content-Type', 'application/x-www-form-urlencoded')
+        oRequestHandler.addParameters('Referer', 'http://www.planet-streaming.com/')
+        oRequestHandler.addParameters('do', 'search')
+        oRequestHandler.addParameters('subaction', 'search')
+        oRequestHandler.addParameters('story', sSearch)
+        sHtmlContent = oRequestHandler.request()
         
-        reponse = urllib2.urlopen(request)
-        sHtmlContent = reponse.read()
-        reponse.close()
+        # request = urllib2.Request(sUrl,sPOST)
+        # request.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20100101 Firefox/22.0')
+        # request.add_header('Content-Type', 'application/x-www-form-urlencoded')
+        # request.add_header('Referer', 'http://www.planet-streaming.com/')
+        
+        # reponse = urllib2.urlopen(request)
+        # sHtmlContent = reponse.read()
+        # reponse.close()
         
     else:
         oInputParameterHandler = cInputParameterHandler()
@@ -180,7 +190,8 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addNext(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]' , oOutputParameterHandler)
  
-    oGui.setEndOfDirectory()
+    if not sSearch:
+        oGui.setEndOfDirectory()
          
 def __checkForNextPage(sHtmlContent):
     
