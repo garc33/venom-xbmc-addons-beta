@@ -198,8 +198,12 @@ def showHosters():
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
 
     sHtmlContent = CloudflareBypass().GetHtml(sUrl)
+    
+    import xbmc
+    xbmc.log(sUrl)
 
-    sPattern = "<a target='playerFrame' href='([^<>]+?)'>(?:<img src='([^<>]+?)'><\/a>)*"
+    #sPattern = "<a target='playerFrame' href='([^<>]+?)'>(?:<img src='([^<>]+?)'><\/a>)*"
+    sPattern = "href='([^<>]+?)'.+?>(?:<img src='([^<>]+?)'><\/a>)*"
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     
