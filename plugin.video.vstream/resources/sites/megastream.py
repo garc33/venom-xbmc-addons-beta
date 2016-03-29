@@ -348,7 +348,8 @@ def showMovies(sSearch = ''):
     
     oParser = cParser()
     
-    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<'
+    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3><p>.+?<\/p><p>(.+?)<\/p><p class="tile_film_serie_resume">(.+?)<\/p><\/div><div class="bottomRight_ribbon_tile_film"><span id="spanRibbonFilm.+?">(.+?)<\/span><\/div>'
+    #sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<'
     aResult = oParser.parse(sHtmlContent, sPattern)
    
     if (aResult[0] == True):
@@ -358,7 +359,11 @@ def showMovies(sSearch = ''):
             cConfig().updateDialog(dialog, total)
             if dialog.iscanceled():
                 break
-           
+               
+            sSmall = aEntry[3].replace('<span class="likeThis">', '').replace('</span>', '').replace('<p', '').replace('</p>', '')
+            sP = aEntry[5].replace('<span class="likeThis">', '').replace('</span>', '').replace('<p', '').replace('</p>', '')
+            sTitle = aEntry[2]+' - [COLOR beige]'+sSmall+'[/COLOR]' + ' - [COLOR lightblue]'+sP+'[/COLOR]'  #azure
+            
             sThumbnail = URL_MAIN+str(aEntry[1])
             siteUrl = URL_MAIN+str(aEntry[0])
             sCom = str(aEntry[3])
