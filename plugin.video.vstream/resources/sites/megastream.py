@@ -377,7 +377,7 @@ def showMovies(sSearch = ''):
             elif 'count_tiles_mangas' in param:
                 oGui.addTV(SITE_IDENTIFIER, 'showEpisode', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
             else:
-                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
+                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'films.png', sThumbnail, sCom, oOutputParameterHandler)
            
         cConfig().finishDialog(dialog)
  
