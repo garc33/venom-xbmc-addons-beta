@@ -357,7 +357,6 @@ def showMovies(sSearch = ''):
         Spage = int(param['count_tiles_mangas'])
         sNextpage = 'count_tiles_mangas=' + str(Spage + 20)
 
-
     UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0'
     headers = {'User-Agent': UA ,
                'Host' : 'mega-stream.fr'}
@@ -374,8 +373,8 @@ def showMovies(sSearch = ''):
     
     oParser = cParser()
     
-    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3><p>.+?<\/p><p>(.+?)<\/p><p class="tile_film_serie_resume">(.+?)<\/p><\/div><div class="bottomRight_ribbon_tile_film"><span id="spanRibbonFilm.+?">(.+?)<\/span><\/div>'
-    #sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<'
+    #sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3><p>.+?<\/p><p>(.+?)<\/p><p class="tile_film_serie_resume">(.+?)<\/p><\/div><div class="bottomRight_ribbon_tile_film"><span id="spanRibbonFilm.+?">(.+?)<\/span><\/div>'
+    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<.+?<span id="spanRibbonFilm[0-9]+">(.+?)<\/span>'
     aResult = oParser.parse(sHtmlContent, sPattern)
    
     if (aResult[0] == True):
@@ -385,23 +384,22 @@ def showMovies(sSearch = ''):
             cConfig().updateDialog(dialog, total)
             if dialog.iscanceled():
                 break
-               
-            sSmall = aEntry[3].replace('<span class="likeThis">', '').replace('</span>', '').replace('<p', '').replace('</p>', '')
-            sP = aEntry[5].replace('<span class="likeThis">', '').replace('</span>', '').replace('<p', '').replace('</p>', '')
-            sTitle = aEntry[2]+' - [COLOR beige]'+sSmall+'[/COLOR]' + ' - [COLOR lightblue]'+sP+'[/COLOR]'  #azure
             
+            #sAnnee = aEntry[3]
+            sQual = aEntry[4]
+            sCom = str(aEntry[3])
+            sTitle = aEntry[2]+' [COLOR lightblue]' + sQual + '[/COLOR]'
             sThumbnail = URL_MAIN+str(aEntry[1])
             siteUrl = URL_MAIN+str(aEntry[0])
-            sCom = str(aEntry[3])
 
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', siteUrl)
             oOutputParameterHandler.addParameter('sMovieTitle', str(aEntry[2]))
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)
             if 'count_tiles_series' in param:
-                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, 'films.png', sThumbnail, sCom, oOutputParameterHandler)
             elif 'count_tiles_mangas' in param:
-                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', aEntry[2], 'films.png', sThumbnail, sCom, oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'showEpisode', sTitle, 'films.png', sThumbnail, sCom, oOutputParameterHandler)
             else:
                 oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sTitle, 'films.png', sThumbnail, sCom, oOutputParameterHandler)
            
