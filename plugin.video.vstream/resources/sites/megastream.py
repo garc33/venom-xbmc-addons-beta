@@ -19,17 +19,17 @@ SITE_DESC = ''
 
 URL_MAIN = 'http://mega-stream.fr/'
 
-MOVIE_NEWS = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0', 'showMovies')
-MOVIE_MOVIE = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0', 'showMovies')
-MOVIE_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0&onlyHD=none', 'showMovies')
+MOVIE_NEWS = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0&tout_les_genres=none', 'showMovies')
+MOVIE_MOVIE = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0&tout_les_genres=none', 'showMovies')
+MOVIE_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0&tout_les_genres=none&onlyHD=none', 'showMovies')
 MOVIE_GENRES = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_film=0&genres[]=' , 'showGenreMovie')
 
-SERIE_SERIES = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_series=0', 'showMovies')
-SERIE_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_series=0&onlyHD=none', 'showMovies')
+SERIE_SERIES = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_series=0&tout_les_genres=none', 'showMovies')
+SERIE_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_series=0&tout_les_genres=none&onlyHD=none', 'showMovies')
 SERIE_GENRES = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_series=0&genres[]=', 'showGenreSerie')
 
-ANIM_ANIMS = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_mangas=0', 'showMovies')
-ANIM_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_mangas=0&onlyHD=none', 'showMovies')
+ANIM_ANIMS = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_mangas=0&tout_les_genres=none', 'showMovies')
+ANIM_HD = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_mangas=0&tout_les_genres=none&onlyHD=none', 'showMovies')
 ANIM_GENRES = (URL_MAIN +'fonctions/infinite_scroll.php?count_tiles_mangas=0&genres[]=', 'showGenreAnime')
  
 URL_SEARCH = ('http://mega-stream.fr/fonctions/recherche.php', 'resultSearch')
@@ -113,57 +113,57 @@ def showGenreMovie():
  
     liste = []
     liste.append( ['Action', sUrl + '2'] ) 
-    liste.append( ['Action HD', sUrl + '&onlyHD=none&genres[]=2'] )   
+    liste.append( ['Action HD', sUrl + '2' + '&onlyHD=none'] )   
     liste.append( ['Animation', sUrl + '20'] )
-    liste.append( ['Animation HD', sUrl + '&onlyHD=none&genres[]=20'] )
+    liste.append( ['Animation HD', sUrl + '20' + '&onlyHD=none'] )
     liste.append( ['Arts Martiaux', sUrl + '22'] )
-    liste.append( ['Arts Martiaux HD', sUrl + '&onlyHD=none&genres[]=22'] )
+    liste.append( ['Arts Martiaux HD', sUrl + '22' + '&onlyHD=none'] )
     liste.append( ['Aventure', sUrl + '7'] )
-    liste.append( ['Aventure HD', sUrl +  '&onlyHD=none&genres[]=7'] )
+    liste.append( ['Aventure HD', sUrl + '7' + '&onlyHD=none'] )
     liste.append( ['Biopic', sUrl + '10'] )
-    liste.append( ['Biopic HD', sUrl + '&onlyHD=none&genres[]=10'] )
+    liste.append( ['Biopic HD', sUrl + '10' + '&onlyHD=none'] )
     liste.append( ['Comedie', sUrl + '3'] )
-    liste.append( ['Comedie HD', sUrl + '&onlyHD=none&genres[]=3'] )
+    liste.append( ['Comedie HD', sUrl + '3' + '&onlyHD=none'] )
     liste.append( ['Comedie Dramatique', sUrl + '16'] )
-    liste.append( ['Comedie Dramatique HD', sUrl + '&onlyHD=none&genres[]=16'] )
+    liste.append( ['Comedie Dramatique HD', sUrl + '16' + '&onlyHD=none'] )
     liste.append( ['Comedie Musicale', sUrl + '24'] )
-    liste.append( ['Comedie Musicale HD', sUrl + '&onlyHD=none&genres[]=24'] )
+    liste.append( ['Comedie Musicale HD', sUrl + '24' + '&onlyHD=none'] )
     liste.append( ['Documentaire', sUrl + '18'] )
-    liste.append( ['Documentaire HD', sUrl + '&onlyHD=none&genres[]=18'] )    
+    liste.append( ['Documentaire HD', sUrl + '18' + '&onlyHD=none'] )    
     liste.append( ['Drame', sUrl + '9'] )
-    liste.append( ['Drame HD', sUrl + '&onlyHD=none&genres[]=9'] )
+    liste.append( ['Drame HD', sUrl + '9' + '&onlyHD=none'] )
     liste.append( ['Epouvante Horreur', sUrl + '14'] )
-    liste.append( ['Epouvante Horreur HD', sUrl + '&onlyHD=none&genres[]=14'] )
+    liste.append( ['Epouvante Horreur HD', sUrl + '14' + '&onlyHD=none'] )
     liste.append( ['Fantastique', sUrl + '11'] )
-    liste.append( ['Fantastique HD', sUrl + '&onlyHD=none&genres[]=11'] )
+    liste.append( ['Fantastique HD', sUrl + '11' + '&onlyHD=none'] )
     liste.append( ['Famille', sUrl + '25'] )
-    liste.append( ['Famille HD', sUrl + '&onlyHD=none&genres[]=25'] )
+    liste.append( ['Famille HD', sUrl + '25' + '&onlyHD=none'] )
     liste.append( ['Films de Noel', sUrl + '21'] )
-    liste.append( ['Films de Noel HD', sUrl + '&onlyHD=none&genres[]=21'] )
+    liste.append( ['Films de Noel HD', sUrl + '21' + '&onlyHD=none'] )
     liste.append( ['Guerre', sUrl + '17'] )
-    liste.append( ['Guerre HD', sUrl + '&onlyHD=none&genres[]=17'] )
+    liste.append( ['Guerre HD', sUrl + '17' + '&onlyHD=none'] )
     liste.append( ['Historique', sUrl + '27'] )
-    liste.append( ['Historique HD', sUrl + '&onlyHD=none&genres[]=27'] )
+    liste.append( ['Historique HD', sUrl + '27' + '&onlyHD=none'] )
     liste.append( ['Horreur', sUrl + '153'] )
-    liste.append( ['Horreur HD', sUrl + '&onlyHD=none&genres[]=153'] )    
+    liste.append( ['Horreur HD', sUrl + '153' + '&onlyHD=none'] )    
     liste.append( ['Musical', sUrl + '26'] )
-    liste.append( ['Musical HD', sUrl + '&onlyHD=none&genres[]=26'] )
+    liste.append( ['Musical HD', sUrl + '26' + '&onlyHD=none'] )
     liste.append( ['Peplum', sUrl + '108'] ) 
-    liste.append( ['Peplum HD', sUrl + '&onlyHD=none&genres[]=108'] ) 
+    liste.append( ['Peplum HD', sUrl + '108' + '&onlyHD=none'] ) 
     liste.append( ['Policier', sUrl + '12'] )
-    liste.append( ['Policier HD', sUrl + '&onlyHD=none&genres[]=12'] )
+    liste.append( ['Policier HD', sUrl + '12' + '&onlyHD=none'] )
     liste.append( ['Romance', sUrl + '15'] )
-    liste.append( ['Romance HD', sUrl + '&onlyHD=none&genres[]=15'] )
+    liste.append( ['Romance HD', sUrl + '15' + '&onlyHD=none'] )
     liste.append( ['Science Fiction', sUrl + '4'] )
-    liste.append( ['Science Fiction HD', sUrl + '&onlyHD=none&genres[]=4'] )
+    liste.append( ['Science Fiction HD', sUrl + '4' + '&onlyHD=none'] )
     liste.append( ['Spectacles', sUrl + '23'] )
-    liste.append( ['Spectacles HD', sUrl + '&onlyHD=none&genres[]=23'] )
+    liste.append( ['Spectacles HD', sUrl + '23' + '&onlyHD=none'] )
     liste.append( ['TV', sUrl + '133'] )
-    liste.append( ['TV HD', sUrl + '&onlyHD=none&genres[]=133'] )
+    liste.append( ['TV HD', sUrl + '133' + '&onlyHD=none'] )
     liste.append( ['Thriller', sUrl + '13'] )
-    liste.append( ['Thriller HD', sUrl + '&onlyHD=none&genres[]=13'] )
+    liste.append( ['Thriller HD', sUrl + '13' + '&onlyHD=none'] )
     liste.append( ['Western', sUrl + '19'] )
-    liste.append( ['Western HD', sUrl + '&onlyHD=none&genres[]=19'] )
+    liste.append( ['Western HD', sUrl + '19' + '&onlyHD=none'] )
                
     for sTitle,sUrl in liste:
        
@@ -338,9 +338,8 @@ def showMovies(sSearch = ''):
     param['catLatBar'] = 'on'
     param['lat_bar_more_filters'] = 'dateSortie'
     
-    #recuperation valeur filtre par genre
-    if 'genres[]' in param:
-      genre = sUrl.split('&')[1]
+    #recuperation de la valeur filtre par genre ou tout_les_genres
+    genre = sUrl.split('&')[1]
     
     #nettoyage url
     sUrl = sUrl.split('?')[0]
@@ -406,11 +405,9 @@ def showMovies(sSearch = ''):
         cConfig().finishDialog(dialog)
  
         #Affichage page suivante
-        sNextpage = sUrl + '?' + sNextpage
+        sNextpage = sUrl + '?' + sNextpage + '&' + genre
         if 'onlyHD' in param:
            sNextpage = sNextpage + '&onlyHD=none'
-        if 'genres[]' in param:
-           sNextpage = sNextpage + '&' + genre
         
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', sNextpage)
