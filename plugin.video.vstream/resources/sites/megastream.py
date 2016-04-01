@@ -373,7 +373,7 @@ def showMovies(sSearch = ''):
     oParser = cParser()
     
     #sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3><p>.+?<\/p><p>(.+?)<\/p><p class="tile_film_serie_resume">(.+?)<\/p><\/div><div class="bottomRight_ribbon_tile_film"><span id="spanRibbonFilm.+?">(.+?)<\/span><\/div>'
-    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<.+?<span id="spanRibbonFilm[0-9]+">(.+?)<\/span>'
+    sPattern = '<a class="tile_film" href="(.+?)">.+?<img src="(.+?)"\/*>.+?<h3>(.+?)<\/h3>.+?<p class="tile_film_serie_resume">(.+?)<.+?<span id="spanRibbonFilm[0-9]+">([^<>]+)*<\/span>'
     aResult = oParser.parse(sHtmlContent, sPattern)
    
     if (aResult[0] == True):
@@ -385,7 +385,9 @@ def showMovies(sSearch = ''):
                 break
             
             #sAnnee = aEntry[3]
-            sQual = aEntry[4]
+            sQual = ''
+            if aEntry[4]:
+                sQual = aEntry[4]
             sCom = str(aEntry[3])
             sTitle = aEntry[2]+' [COLOR lightblue]' + sQual + '[/COLOR]'
             sThumbnail = URL_MAIN+str(aEntry[1])
