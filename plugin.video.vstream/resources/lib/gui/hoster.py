@@ -267,7 +267,9 @@ class cHosterGui:
             return cHosterHandler().getHoster('uptobox')
         if ('uplea.com' in sHosterUrl):
             return cHosterHandler().getHoster('uplea')            
-
+        if ('uploaded' in sHosterUrl or 'ul.to' in sHosterUrl):
+            return cHosterHandler().getHoster('uploaded')
+            
         #Si aucun hebergeur connu on teste les liens directs
         if (sHosterUrl[-4:] in '.mp4.avi.flv.m3u8'):
             return cHosterHandler().getHoster('lien_direct')
