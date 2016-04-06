@@ -411,6 +411,11 @@
         <setting id="hoster_onefichier_premium" type="bool" label="30403" default="false"/>
         <setting id="hoster_onefichier_username" type="text" label="30401" default=""/>
         <setting id="hoster_onefichier_password" type="text" label="30402" default="" option="hidden"/>
+        <setting type="sep" />
+        <setting label="Uploaded" type="lsep"/>
+        <setting id="hoster_uploaded_premium" type="bool" label="30403" default="false"/>
+        <setting id="hoster_uploaded_username" type="text" label="30401" default=""/>
+        <setting id="hoster_uploaded_password" type="text" label="30402" default="" option="hidden"/>
     </category>
 
     <!--<category label="30026">
