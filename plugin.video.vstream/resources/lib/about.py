@@ -51,7 +51,15 @@ class cAbout:
 
     def main(self, env):
         
-        if (env == 'changelog'):
+        if (env == 'urlresolver'):
+            xbmcaddon.Addon('script.module.urlresolver').openSettings()
+            return
+            
+        elif (env == 'metahandler'):
+            xbmcaddon.Addon('script.module.metahandler').openSettings()
+            return
+        
+        elif (env == 'changelog'):
             try:
                 sUrl = 'https://raw.githubusercontent.com/LordVenom/venom-xbmc-addons/master/plugin.video.vstream/changelog.txt'
                 oRequest =  urllib2.Request(sUrl)
