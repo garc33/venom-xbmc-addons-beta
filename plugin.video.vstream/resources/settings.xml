@@ -6,7 +6,7 @@
         <!-- <setting id="debug" type="bool" label="30000" default="false"/> -->
         <setting id="playerType" type="enum" values="Auto|MPlayer|DVDPlayer" label="30001" default="2"/>
         <setting id="meta-view" type="bool" label="Recherche les Métadonnées (ralenti l'Addon)" default="false"/>
-        <setting label="Paramètres des Métadonnées" type="action" action="Addon.OpenSettings(script.module.metahandler)" enable ="true" />
+        <setting label="Paramètres des Métadonnées" type="action" option="close" action="XBMC.RunScript(special://home/addons/plugin.video.vstream/resources/lib/about.py, metahandler)" />
         <setting id="home-view" type="bool" label="Afficher l'Accueil par Catégories" default="true"/>
         <setting id="param_timeout" label="30027" type="number" default="1000"/>
         <setting id="history-view" type="bool" label="Activer l'historique de recherche" default="true"/>
@@ -416,6 +416,15 @@
         <setting id="hoster_uploaded_premium" type="bool" label="30403" default="false"/>
         <setting id="hoster_uploaded_username" type="text" label="30401" default=""/>
         <setting id="hoster_uploaded_password" type="text" label="30402" default="" option="hidden"/>
+        <setting type="sep" />
+        <setting type="sep"/>
+        <setting type="sep"/>
+        <setting label="Utiliser UrlResolver vous permettra d'utiliser Les debrideurs" type="lsep"/>
+        <setting label="ATTENTION: Vstream ne gere pas cette partie, pensez a le desactiver" type="lsep"/>
+        <setting label="si les videos ne marchent plus" type="lsep"/>
+        <setting id="UserUrlResolver" type="bool" label="Passer par UrlResolver" default="false"/>
+        <setting label="Configurer UrlResolver" type="action" option="close" action="XBMC.RunScript(special://home/addons/plugin.video.vstream/resources/lib/about.py, urlresolver)" />
+        <setting type="sep"/>
     </category>
 
     <!--<category label="30026">
