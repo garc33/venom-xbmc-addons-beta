@@ -126,7 +126,7 @@ class cHosterGui:
             return False
             
         #L'user a active l'url resolver ?
-        if cConfig().getSetting('UserUrlResolver'):
+        if cConfig().getSetting('UserUrlResolver') == 'true':
             import urlresolver
             hmf = urlresolver.HostedMediaFile(url=sHosterUrl)
             if hmf.valid_url():
