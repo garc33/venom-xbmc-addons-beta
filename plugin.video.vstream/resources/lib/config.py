@@ -240,10 +240,10 @@ class cConfig():
                 xbmc.executebuiltin("Action(Info)")
                 return
         
-
-        if (not meta['imdb_id']):
-            xbmc.executebuiltin("Action(Info)")
-            return
+        #Pas compris a quoi ca servait ??
+        #if (not meta['imdb_id']):
+        #    xbmc.executebuiltin("Action(Info)")
+        #    return
                 
         class XMLDialog(xbmcgui.WindowXMLDialog):
             """
