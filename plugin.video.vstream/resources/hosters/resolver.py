@@ -13,7 +13,7 @@ class cHoster(iHoster):
         return  self.__sDisplayName
 
     def setDisplayName(self, sDisplayName):
-        self.__sDisplayName = sDisplayName + ' [COLOR skyblue]'+self.__sDisplayName+'[/COLOR] [COLOR khaki]'+self.__sHD+'[/COLOR]'
+        self.__sDisplayName = sDisplayName + ' [COLOR skyblue]'+self.__sDisplayName+'[/COLOR]'
 
     def setFileName(self, sFileName):
         self.__sFileName = sFileName
@@ -37,7 +37,7 @@ class cHoster(iHoster):
         return True
 
     def getPattern(self):
-        return '';
+        return ''
         
     def __getIdFromUrl(self, sUrl):            
         return ''
@@ -57,11 +57,12 @@ class cHoster(iHoster):
     def __getMediaLinkForGuest(self):
         sUrl = self.__sUrl
         
-        host = urlresolver.HostedMediaFile(sUrl)
-        
-        if host:
-            api_call = urlresolver.resolve(sUrl)
-            return True, api_call
+        hmf = urlresolver.HostedMediaFile(url=sUrl)
+        if hmf.valid_url():
+            stream_url = hmf.resolve()
+            cConfig().log(stream_url)
+            if stream_url:
+                return True,stream_url
             
         return False, False
         
