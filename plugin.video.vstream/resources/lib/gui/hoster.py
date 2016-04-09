@@ -124,7 +124,15 @@ class cHosterGui:
         #securitee
         if (not sHosterUrl):
             return False
+            
+        #L'user a active l'url resolver ?
+        if cConfig().getSetting('UserUrlResolver'):
+            import urlresolver
+            hmf = urlresolver.HostedMediaFile(url=sHosterUrl)
+            if hmf.valid_url():
+                return cHosterHandler().getHoster('resolver')
 
+        #Gestion classique
         if ('novamov' in sHosterUrl):
             return cHosterHandler().getHoster('novamov')
         if ('divxstage' in sHosterUrl):
@@ -519,7 +527,3 @@ class cHosterGui:
         oRequest = cRequestHandler(sUrl)
         oRequest.request()
         return oRequest.getRealUrl()
-
-        
-
-       
