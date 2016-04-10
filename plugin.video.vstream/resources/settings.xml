@@ -420,8 +420,12 @@
         <setting type="sep"/>
         <setting type="sep"/>
         <setting label="Utiliser UrlResolver vous permettra d'utiliser Les debrideurs" type="lsep"/>
-        <setting label="ATTENTION: Vstream ne gere pas cette partie, pensez a le desactiver" type="lsep"/>
-        <setting label="si les videos ne marchent plus" type="lsep"/>
+        <setting type="sep"/>
+        <setting type="sep"/>
+        <setting label="ATTENTION: Vstream ne gere pas cette partie, pensez a le desactiver si les" type="lsep"/>
+        <setting label="videos ne marchent plus" type="lsep"/>
+        <setting label="A moins d'avoir un debrideur, cocher cette case vous apportera plus de" type="lsep"/>
+        <setting label="problemes que d'avantages" type="lsep"/>
         <setting id="UserUrlResolver" type="bool" label="Passer par UrlResolver" default="false"/>
         <setting label="Configurer UrlResolver" type="action" option="close" action="XBMC.RunScript(special://home/addons/plugin.video.vstream/resources/lib/runscript.py, urlresolver)" />
         <setting type="sep"/>
