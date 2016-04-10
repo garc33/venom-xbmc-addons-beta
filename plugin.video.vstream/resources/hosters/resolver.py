@@ -5,7 +5,8 @@ import urlresolver
 class cHoster(iHoster):
 
     def __init__(self):
-        self.__sDisplayName = 'Resolver'
+        self.__sDisplayName = 'RSLVR-'
+        self.__sRealHost = '???'
         self.__sFileName = self.__sDisplayName
         self.__sHD = ''
 
@@ -13,7 +14,7 @@ class cHoster(iHoster):
         return  self.__sDisplayName
 
     def setDisplayName(self, sDisplayName):
-        self.__sDisplayName = sDisplayName + ' [COLOR skyblue]'+self.__sDisplayName+'[/COLOR]'
+        self.__sDisplayName = sDisplayName + ' [COLOR violet]'+ self.__sDisplayName + self.__sRealHost + '[/COLOR]'
 
     def setFileName(self, sFileName):
         self.__sFileName = sFileName
@@ -24,6 +25,9 @@ class cHoster(iHoster):
     def getPluginIdentifier(self):
         return 'resolver'
 
+    def setRealHost(self, sName):
+        self.__sRealHost = sName
+        
     def setHD(self, sHD):
         self.__sHD = ''
 
