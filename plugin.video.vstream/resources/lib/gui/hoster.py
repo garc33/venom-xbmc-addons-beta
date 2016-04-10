@@ -130,7 +130,11 @@ class cHosterGui:
             import urlresolver
             hmf = urlresolver.HostedMediaFile(url=sHosterUrl)
             if hmf.valid_url():
-                return cHosterHandler().getHoster('resolver')
+                tmp = cHosterHandler().getHoster('resolver')
+                RH = sHosterUrl.split('/')[2]
+                RH = RH.replace('www.','')
+                tmp.setRealHost( RH[:3].upper() )
+                return tmp
 
         #Gestion classique
         if ('novamov' in sHosterUrl):
@@ -527,3 +531,7 @@ class cHosterGui:
         oRequest = cRequestHandler(sUrl)
         oRequest.request()
         return oRequest.getRealUrl()
+
+        
+
+       
