@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 #From chataigne73
 
@@ -193,6 +194,7 @@ def showMovies(sSearch = ''):
         sUrl = oInputParameterHandler.getValue('siteUrl') 
         
     #print sUrl
+    oDialog = cConfig().createDialogOK('Desole, probleme de captcha.\n Veuillez un rentrer au un directement sur le site, le temps de reparer')
     
     oRequestHandler = cRequestHandler(sUrl) 
     sHtmlContent = oRequestHandler.request()
@@ -570,14 +572,21 @@ def Display_protected_link():
     sThumbnail=oInputParameterHandler.getValue('sThumbnail')
 
     oParser = cParser()
+    
+    import xbmc
+    xbmc.log(sUrl)
+    
     #Est ce un lien dl-protect ?
     if 'dl-protect' in sUrl:
         sHtmlContent = DecryptDlProtect(sUrl)
         
         if sHtmlContent:
-
             sPattern_dlprotect = '><a href="(.+?)" target="_blank">'
             aResult_dlprotect = oParser.parse(sHtmlContent, sPattern_dlprotect)
+            
+        else:
+            oDialog = cConfig().createDialogOK('Desole, probleme de captcha.\n Veuillez un rentrer au un directement sur le site, le temps de reparer')
+            aResult_dlprotect = (False, False)
             
     #Si lien normal       
     else:
