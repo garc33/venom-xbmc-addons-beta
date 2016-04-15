@@ -1,4 +1,3 @@
-
 #-*- coding: utf-8 -*-
 #From chataigne73
 
@@ -193,9 +192,6 @@ def showMovies(sSearch = ''):
         oInputParameterHandler = cInputParameterHandler()
         sUrl = oInputParameterHandler.getValue('siteUrl') 
         
-    #print sUrl
-    oDialog = cConfig().createDialogOK('Desole, probleme de captcha.\n Veuillez un rentrer au un directement sur le site, le temps de reparer')
-    
     oRequestHandler = cRequestHandler(sUrl) 
     sHtmlContent = oRequestHandler.request()
     
