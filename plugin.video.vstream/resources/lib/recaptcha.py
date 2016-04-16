@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #*************************************************************************************************************************
 # from Shani's LPro Code https://github.com/Shani-08/ShaniXBMCWork2/blob/master/other/unCaptcha.py
+# and https://github.com/OpenMediaVault-Plugin-Developers/openmediavault-pyload/blob/master/usr/share/pyload/module/plugins/captcha/ReCaptcha.py
 
 import random
 import re
@@ -271,15 +272,19 @@ class UnCaptchaReCaptcha:
         vers, language, jsh, questionfile = self._collect_api_info()
         millis, rpc         = self._prepare_time_and_rpc()
         
+        co = base64.b64encode('https://www.google.com:443')
+        
         parent="www.google.com/recaptcha/api2/demo/"
         html =getUrl("https://www.google.com/recaptcha/api2/anchor?"+
-                            urllib.urlencode({'k'       : key,
+                            urllib.urlencode({
+                                 'k'       : key,
                                  'hl'      : language,
                                  'v'       : vers,
                                  #'co' : "aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbTo0NDM.",
-                                 'co' : "aHR0cDovL3d3dy5kbC1wcm90ZWN0LmNvbTo4MA..",
+                                 'co' : co,
                                  'size'     : "large",
-                                 "cb"  : "8shiuzd0nyrv"}),headers=headers)
+                                 "cb"  : "8shiuzd0nyrv"
+                                 }),headers=headers)
 
         token1 = re.search(r'id="recaptcha-token" value="(.*?)">', html)
         
