@@ -16,6 +16,7 @@ import xbmcgui
 import xbmcvfs
 import re,sys
 import threading
+import xbmc
 
 try:
     import StorageServer
@@ -206,7 +207,7 @@ class cDownloadProgressBar(threading.Thread):
                 headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
             
             req = urllib2.Request(url, None, headers)
-
+            
             self.oUrlHandler = urllib2.urlopen(req,timeout=30)
             #self.__instance = repr(self)
             self.file = xbmcvfs.File(self.__fPath, 'w')
@@ -291,7 +292,8 @@ class cDownload:
         oHoster = cHosterGui().checkHoster(sDBUrl)
         oHoster.setUrl(sDBUrl)
         aLink = oHoster.getMediaLink()
-
+        
+        xbmc.log(str(aLink))
         #aLink = (True,'https://github.com/LordVenom/venom-xbmc-addons-beta/blob/master/plugin.video.vstream/Thumbs.db?raw=true')
         
         if (aLink[0] == True):
