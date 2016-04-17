@@ -125,6 +125,9 @@ class cHosterGui:
         if (not sHosterUrl):
             return False
             
+        #Petit nettoyage
+        sHosterUrl = sHosterUrl.split('|')[0]
+            
         #L'user a active l'url resolver ?
         if cConfig().getSetting('UserUrlResolver') == 'true':
             import urlresolver
@@ -398,6 +401,9 @@ class cHosterGui:
 
         sHosterName = oHoster.getDisplayName()
         cConfig().showInfo(sHosterName, 'Resolve')
+        
+        #oHoster.setUrl(sMediaUrl)
+        #aLink = oHoster.getMediaLink()
         
         try:
         
