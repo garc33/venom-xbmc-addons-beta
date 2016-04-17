@@ -3,7 +3,6 @@ from resources.lib.parser import cParser
 from resources.lib.config import cConfig
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
-import re,urllib2,urllib
 import xbmcgui
 import xbmc
 
@@ -82,7 +81,6 @@ class cHoster(iHoster):
         
         
         if (aResult[0] == True):
-            xbmc.log(aResult[1][0])
             sUnpacked = cPacker().unpack(aResult[1][0])
             sHtmlContent = sUnpacked
             
