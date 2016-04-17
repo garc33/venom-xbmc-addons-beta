@@ -7,11 +7,6 @@ import urllib2,urllib,re
 
 import xbmc,xbmcgui
 
-#import captcha_lib
-import cookielib
-cookieJar = cookielib.LWPCookieJar()
-import recaptcha
-
 import xbmc
 
 import xbmcaddon,os
@@ -194,6 +189,9 @@ def DecryptDlProtect(url):
     #Google re captcha ?
     r = re.search('data-sitekey="([^"]+)', sHtmlContent)
     if r:
+        import cookielib
+        import recaptcha
+        cookieJar = cookielib.LWPCookieJar()
         recaptcha.performCaptcha(url,cookieJar)
         return ''
     #captcha classique
