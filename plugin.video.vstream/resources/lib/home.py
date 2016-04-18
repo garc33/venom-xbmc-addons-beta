@@ -26,7 +26,7 @@ color_videos = cConfig().getSetting('color_videos')
 color_replaytvs = cConfig().getSetting('color_replaytvs')
 
 class cHome:
-      
+
 
     def load(self):
         oGui = cGui()
@@ -35,17 +35,17 @@ class cHome:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir(SITE_IDENTIFIER, 'showSearch', '[COLOR '+color_cherches+']'+cConfig().getlanguage(30076)+'[/COLOR]', 'search.png', oOutputParameterHandler)
-        
+
         if (cConfig().getSetting('home_cherchev') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir('themoviedb_org', 'load', '[COLOR '+color_cherchev+']'+cConfig().getlanguage(30088)+'[/COLOR]', 'searchtmdb.png', oOutputParameterHandler)
-            
+
         if (cConfig().getSetting('home_tvs') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir('freebox', 'load', '[COLOR '+color_tvs+']'+cConfig().getlanguage(30115)+'[/COLOR]', 'tv.png', oOutputParameterHandler)
-        
+
         if (cConfig().getSetting('home_replaytvs') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -55,7 +55,7 @@ class cHome:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', '[COLOR '+color_films+']'+cConfig().getlanguage(30120)+'[/COLOR]', 'films.png', oOutputParameterHandler)
-            
+
         if (cConfig().getSetting('home_series') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -69,8 +69,8 @@ class cHome:
         if (cConfig().getSetting('home_docs') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-            oGui.addDir(SITE_IDENTIFIER, 'docDocs', '[COLOR '+color_docs+']'+cConfig().getlanguage(30112)+'[/COLOR]', 'doc.png', oOutputParameterHandler)
-        
+            oGui.addDir(SITE_IDENTIFIER, 'showDocs', '[COLOR '+color_docs+']'+cConfig().getlanguage(30112)+'[/COLOR]', 'doc.png', oOutputParameterHandler)
+
         if (cConfig().getSetting('home_sports') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
@@ -80,7 +80,7 @@ class cHome:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir(SITE_IDENTIFIER, 'showNets', '[COLOR '+color_videos+']'+cConfig().getlanguage(30114)+'[/COLOR]', 'buzz.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('cFav', 'getFavourites', '[COLOR teal]'+cConfig().getlanguage(30210)+'[/COLOR]', 'mark.png', oOutputParameterHandler)
@@ -88,24 +88,24 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('cDownload', 'getDownload', '[COLOR teal]Téléchargement[/COLOR]', 'download.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-        oGui.addDir('cLibrary', 'getLibrary', 'Librairie beta', 'download.png', oOutputParameterHandler)   
-        
+        oGui.addDir('cLibrary', 'getLibrary', 'Librairie beta', 'download.png', oOutputParameterHandler)
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'showSources', cConfig().getlanguage(30116), 'host.png', oOutputParameterHandler)
-        
+
         if (cConfig().getSetting('home_update') == 'true'):
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir(SITE_IDENTIFIER, 'showUpdate', '[COLOR green]Mise a jour disponible[/COLOR]', 'update.png', oOutputParameterHandler)
 
 
-        
+
         oGui.setEndOfDirectory()
-        
+
     def showUpdate(self):
         try:
             from resources.lib.about import cAbout
@@ -113,30 +113,50 @@ class cHome:
         except:
             pass
         return
-    
+
+    def showDocs(self):
+        oGui = cGui()
+
+        # Affiche les Nouveautés Documentaires
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
+        oGui.addDir(SITE_IDENTIFIER, 'docNews', '[COLOR '+color_videos+']Documentaires Nouveautés[/COLOR]', 'news.png', oOutputParameterHandler)
+
+        # Affiche les Genres Documentaires
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
+        oGui.addDir(SITE_IDENTIFIER, 'docGenres', '[COLOR '+color_videos+']Documentaires Genres[/COLOR]', 'genres.png', oOutputParameterHandler)
+
+        # Affiche les Sources Documentaires
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
+        oGui.addDir(SITE_IDENTIFIER, 'docDocs', '[COLOR '+color_videos+']Documentaires Sources[/COLOR]', 'host.png', oOutputParameterHandler)
+
+        oGui.setEndOfDirectory()
+
     def showNets(self):
         oGui = cGui()
-         
+
         # Affiche les Nouveautés Vidéos
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'netsNews', '[COLOR '+color_videos+']Vidéos Nouveautés[/COLOR]', 'news.png', oOutputParameterHandler)
-         
+
         # Affiche les Genres Vidéos
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'netsGenres', '[COLOR '+color_videos+']Vidéos Genres[/COLOR]', 'genres.png', oOutputParameterHandler)
-         
+
         # Affiche les Sources Vidéos
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieNets', '[COLOR '+color_videos+']Vidéos Sources[/COLOR]', 'host.png', oOutputParameterHandler)
-         
+
         oGui.setEndOfDirectory()
-    
+
     def showTV(self):
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('freebox', 'load', '[COLOR '+color_tvs+']Télévision Box[/COLOR]', 'tv.png', oOutputParameterHandler)
@@ -144,12 +164,12 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir('chaine_tv', 'load', '[COLOR '+color_tvs+']Tv du net[/COLOR]', 'tv.png', oOutputParameterHandler)
-        
+
         oGui.setEndOfDirectory()
-        
+
     def showMovies(self):
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieNews', '[COLOR '+color_films+']'+cConfig().getlanguage(30101)+'[/COLOR]', 'films_news.png', oOutputParameterHandler)
@@ -161,7 +181,7 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieHD', '[COLOR '+color_films+']'+cConfig().getlanguage(30160)+'[/COLOR]', 'films_genres.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieComments', '[COLOR '+color_films+']'+cConfig().getlanguage(30103)+'[/COLOR]', 'films_comments.png', oOutputParameterHandler)
@@ -169,7 +189,7 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieNotes', '[COLOR '+color_films+']'+cConfig().getlanguage(30104)+'[/COLOR]', 'films_notes.png', oOutputParameterHandler)
-       
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieGenres', '[COLOR '+color_films+']'+cConfig().getlanguage(30105)+'[/COLOR]', 'films_genres.png', oOutputParameterHandler)
@@ -177,20 +197,20 @@ class cHome:
         # oOutputParameterHandler = cOutputParameterHandler()
         # oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         # oGui.addDir(SITE_IDENTIFIER, 'movieVF', '[COLOR '+color_films+']'+cConfig().getlanguage(30134)+'[/COLOR]', 'films_vf.png', oOutputParameterHandler)
-       
+
         # oOutputParameterHandler = cOutputParameterHandler()
         # oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         # oGui.addDir(SITE_IDENTIFIER, 'movieVOSTFR', '[COLOR '+color_films+']'+cConfig().getlanguage(30135)+'[/COLOR]', 'films_vostfr.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'movieMovie', '[COLOR '+color_films+']'+cConfig().getlanguage(30138)+'[/COLOR]', 'films_host.png', oOutputParameterHandler)
-        
+
         oGui.setEndOfDirectory()
-        
+
     def showSeries(self):
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'serieNews', '[COLOR '+color_series+']'+cConfig().getlanguage(30106)+'[/COLOR]', 'series_news.png', oOutputParameterHandler)
@@ -198,7 +218,7 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'serieGenres', '[COLOR '+color_series+']'+cConfig().getlanguage(30132)+'[/COLOR]', 'series_genres.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'serieVfs', '[COLOR '+color_series+']'+cConfig().getlanguage(30107)+'[/COLOR]', 'series_vf.png', oOutputParameterHandler)
@@ -206,16 +226,16 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'serieVostfrs', '[COLOR '+color_series+']'+cConfig().getlanguage(30108)+'[/COLOR]', 'series_vostfr.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'serieSeries', '[COLOR '+color_series+']'+cConfig().getlanguage(30139)+'[/COLOR]', 'series_host.png', oOutputParameterHandler)
-        
+
         oGui.setEndOfDirectory()
-        
+
     def showAnimes(self):
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'animNews', '[COLOR '+color_anims+']'+cConfig().getlanguage(30109)+'[/COLOR]', 'animes_news.png', oOutputParameterHandler)
@@ -227,28 +247,28 @@ class cHome:
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'animVostfrs', '[COLOR '+color_anims+']'+cConfig().getlanguage(30111)+'[/COLOR]', 'animes_vostfr.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'animGenres', '[COLOR '+color_anims+']'+cConfig().getlanguage(30131)+'[/COLOR]', 'animes_genres.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'animAnims', '[COLOR '+color_anims+']'+cConfig().getlanguage(30140)+'[/COLOR]', 'animes_host.png', oOutputParameterHandler)
-        
+
         oGui.setEndOfDirectory()
-        
+
     def showReplay(self):
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'replayNews', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30133)+'[/COLOR]', 'replay_news.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'replayGenres', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30136)+'[/COLOR]', 'replay_genres.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oGui.addDir(SITE_IDENTIFIER, 'replayReplay', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30137)+'[/COLOR]', 'replay_host.png', oOutputParameterHandler)
@@ -257,7 +277,7 @@ class cHome:
 
     def showSources(self):
         oGui = cGui()
-        
+
         oPluginHandler = cPluginHandler()
         aPlugins = oPluginHandler.getAvailablePlugins()
         for aPlugin in aPlugins:
@@ -275,9 +295,9 @@ class cHome:
 
     def movieViews(self):
         self.__callpluging('MOVIE_VIEWS', '[COLOR '+color_films+']'+cConfig().getlanguage(30102)+'[/COLOR]', 'films_views.png')
-        
+
     def movieHD(self):
-        self.__callpluging('MOVIE_HD', '[COLOR '+color_films+']'+cConfig().getlanguage(30160)+'[/COLOR]', 'films_views.png')        
+        self.__callpluging('MOVIE_HD', '[COLOR '+color_films+']'+cConfig().getlanguage(30160)+'[/COLOR]', 'films_views.png')
 
     def movieComments(self):
         self.__callpluging('MOVIE_COMMENTS', '[COLOR '+color_films+']'+cConfig().getlanguage(30103)+'[/COLOR]', 'films_comments.png')
@@ -330,29 +350,33 @@ class cHome:
     def docDocs(self):
         self.__callpluging('DOC_DOCS', '[COLOR '+color_docs+']'+cConfig().getlanguage(30112)+'[/COLOR]', 'doc.png')
 
+    def docNews(self):
+        self.__callpluging('DOC_NEWS', '[COLOR '+color_docs+']Documentaires Nouveautés[/COLOR]', 'news.png')
+
+    def docGenres(self):
+        self.__callpluging('DOC_GENRES', '[COLOR '+color_docs+']Documentaires Genres[/COLOR]', 'genres.png')
+
     def sportSports(self):
         self.__callpluging('SPORT_SPORTS', '[COLOR '+color_sports+']'+cConfig().getlanguage(30113)+'[/COLOR]', 'sport.png')
 
     def movieNets(self):
         self.__callpluging('MOVIE_NETS', '[COLOR '+color_videos+']'+cConfig().getlanguage(30114)+'[/COLOR]', 'buzz.png')
 
-    # Récupère la variable globale NETS_NEWS dans /plugin.video.vstream/resources/sites/source.py
     def netsNews(self):
         self.__callpluging('NETS_NEWS', '[COLOR '+color_videos+']Vidéos Nouveautés[/COLOR]', 'news.png')
-      
-    # Récupère la variable globale NETS_GENRES dans /plugin.video.vstream/resources/sites/source.py
+
     def  netsGenres(self):
         self.__callpluging('NETS_GENRES', '[COLOR '+color_videos+']Vidéos Genres[/COLOR]', 'genres.png')
-        
+
     def replayReplay(self):
         self.__callpluging('REPLAYTV_REPLAYTV', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30137)+'[/COLOR]', 'replay_host.png')
 
     def replayNews(self):
         self.__callpluging('REPLAYTV_NEWS', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30133)+'[/COLOR]', 'replay_news.png')
-        
+
     def replayGenres(self):
         self.__callpluging('REPLAYTV_GENRES', '[COLOR '+color_replaytvs+']'+cConfig().getlanguage(30136)+'[/COLOR]', 'replay_genres.png')
-        
+
     def showSearch(self):
 
         if (cConfig().getSetting("history-view") == 'true'):
@@ -361,7 +385,7 @@ class cHome:
             readdb = 'False'
 
         oGui = cGui()
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oOutputParameterHandler.addParameter('disp', 'search1')
@@ -375,28 +399,28 @@ class cHome:
         oOutputParameterHandler.addParameter('readdb', readdb)
         sLabel2 = cConfig().getlanguage(30089)+": "+cConfig().getSetting('search2_label')
         oGui.addDir(SITE_IDENTIFIER, 'searchMovie', sLabel2, 'search.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oOutputParameterHandler.addParameter('disp', 'search3')
         oOutputParameterHandler.addParameter('readdb', readdb)
         sLabel3 = cConfig().getlanguage(30090)+": "+cConfig().getSetting('search3_label')
         oGui.addDir(SITE_IDENTIFIER, 'searchMovie', sLabel3, 'search.png', oOutputParameterHandler)
-        
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oOutputParameterHandler.addParameter('disp', 'search4')
         oOutputParameterHandler.addParameter('readdb', readdb)
         sLabel4 = cConfig().getlanguage(30091)+": "+cConfig().getSetting('search4_label')
         oGui.addDir(SITE_IDENTIFIER, 'searchMovie', sLabel4, 'search.png', oOutputParameterHandler)
-        
-        
+
+
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
         oOutputParameterHandler.addParameter('disp', 'search10')
         oOutputParameterHandler.addParameter('readdb', readdb)
         oGui.addDir(SITE_IDENTIFIER, 'searchMovie', '[COLOR orange]Recherche: Alluc_ee[/COLOR]', 'search.png', oOutputParameterHandler)
-        
+
         #history
         if (cConfig().getSetting("history-view") == 'true'):
 
@@ -404,20 +428,20 @@ class cHome:
             if row:
                 oGui.addText(SITE_IDENTIFIER, "[COLOR azure]Votre Historique[/COLOR]")
             for match in row:
-                
+
                 oOutputParameterHandler = cOutputParameterHandler()
-                oOutputParameterHandler.addParameter('siteUrl', 'http://venom')      
+                oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
                 oOutputParameterHandler.addParameter('searchtext', match[1])
                 oOutputParameterHandler.addParameter('disp', match[2])
                 oOutputParameterHandler.addParameter('readdb', 'False')
                 oGui.addDir(SITE_IDENTIFIER, 'searchMovie', "- "+match[1], 'search.png', oOutputParameterHandler)
-             
+
             if row:
 
                 oOutputParameterHandler = cOutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
                 oGui.addDir(SITE_IDENTIFIER, 'delSearch', '[COLOR red]Supprimer l\'historique[/COLOR]', 'search.png', oOutputParameterHandler)
-                
+
 
         oGui.setEndOfDirectory()
 
@@ -431,7 +455,7 @@ class cHome:
     def delSearch(self):
         cDb().del_history()
         return True
-        
+
 
     def __callpluging(self, sVar, sTitle, sIcon):
         oGui = cGui()
@@ -444,7 +468,7 @@ class cHome:
                 oOutputParameterHandler = cOutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', aPlugin[0])
                 oGui.addDir(aPlugin[2], aPlugin[3], sTitle+' - [COLOR azure]'+aPlugin[1]+'[/COLOR]', sIcon, oOutputParameterHandler)
-            except:        
+            except:
                 pass
 
         oGui.setEndOfDirectory()
@@ -460,12 +484,11 @@ class cHome:
         oHandler.setText(sSearchText)
         oHandler.setDisp(sDisp)
         aPlugins = oHandler.getAvailablePlugins()
-        
+
         if (sReadDB != 'False' and aPlugins == True):
-            meta = {}      
+            meta = {}
             meta['title'] = oHandler.getText()
             meta['disp'] = oHandler.getDisp()
             cDb().insert_history(meta)
 
         oGui.setEndOfDirectory()
-
