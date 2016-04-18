@@ -73,6 +73,7 @@ def showGenre():
     oGui = cGui()
 
     liste = []
+    liste.append( ['A l'affiche',URL_MAIN + 'index.php?option=com_content&view=category&id=29'] )
     liste.append( ['Action',URL_MAIN + 'index.php?option=com_content&view=category&id=1'] )
     liste.append( ['Aventure',URL_MAIN + 'index.php?option=com_content&view=category&id=4'] )
     liste.append( ['Comedie',URL_MAIN + 'index.php?option=com_content&view=category&id=6'] )
