@@ -27,7 +27,6 @@ color_replaytvs = cConfig().getSetting('color_replaytvs')
 
 class cHome:
 
-
     def load(self):
         oGui = cGui()
 
@@ -102,8 +101,6 @@ class cHome:
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
             oGui.addDir(SITE_IDENTIFIER, 'showUpdate', '[COLOR green]Mise a jour disponible[/COLOR]', 'update.png', oOutputParameterHandler)
 
-
-
         oGui.setEndOfDirectory()
 
     def showUpdate(self):
@@ -120,17 +117,17 @@ class cHome:
         # Affiche les Nouveautés Documentaires
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-        oGui.addDir(SITE_IDENTIFIER, 'docNews', '[COLOR '+color_videos+']Documentaires Nouveautés[/COLOR]', 'news.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'docNews', '[COLOR '+color_docs+']Documentaires Nouveautés[/COLOR]', 'news.png', oOutputParameterHandler)
 
         # Affiche les Genres Documentaires
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-        oGui.addDir(SITE_IDENTIFIER, 'docGenres', '[COLOR '+color_videos+']Documentaires Genres[/COLOR]', 'genres.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'docGenres', '[COLOR '+color_docs+']Documentaires Genres[/COLOR]', 'genres.png', oOutputParameterHandler)
 
         # Affiche les Sources Documentaires
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-        oGui.addDir(SITE_IDENTIFIER, 'docDocs', '[COLOR '+color_videos+']Documentaires Sources[/COLOR]', 'host.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'docDocs', '[COLOR '+color_docs+']Documentaires Sources[/COLOR]', 'host.png', oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
 
