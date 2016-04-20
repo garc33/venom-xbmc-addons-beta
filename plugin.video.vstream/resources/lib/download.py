@@ -196,25 +196,25 @@ class cDownloadProgressBar(threading.Thread):
         try:
             #Recuperation url simple
             url = self.__sUrl.split('|')[0]
-            
             #Recuperation des headers du lien
             headers = {}
-            u = self.__sUrl.split('|')[1].split('&')
-            for i in u:
-                headers[i.split('=')[0]] = i.replace(i.split('=')[0] + '=','')        
-            
+            if len (self.__sUrl.split('|')) > 1:
+                u = self.__sUrl.split('|')[1].split('&')
+                for i in u:
+                    headers[i.split('=')[0]] = i.replace(i.split('=')[0] + '=','')        
+
             #Rajout du user-agent si abscent
             if not ('User-Agent' in headers):
                 headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
-            
+
             req = urllib2.Request(url, None, headers)
             
             self.oUrlHandler = urllib2.urlopen(req,timeout=30)
             #self.__instance = repr(self)
             self.file = xbmcvfs.File(self.__fPath, 'w')
         except:
-            print 'download error'
-            print self.__sUrl
+            xbmc.log('download error')
+            xbmc.log(self.__sUrl)
             cConfig().showInfo('Erreur initialisation', 'Download error')
             return
         
