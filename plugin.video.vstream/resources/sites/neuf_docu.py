@@ -22,7 +22,7 @@ FUNCTION_SEARCH = 'showMovies'
 
 DOC_NEWS = (URL_MAIN, 'showMovies')
 DOC_GENRES = (True, 'showGenre')
-DOC_DOCS = (URL_MAIN, 'showMovies')
+DOC_DOCS = ('http://', 'load')
 
 def load():
     oGui = cGui()
