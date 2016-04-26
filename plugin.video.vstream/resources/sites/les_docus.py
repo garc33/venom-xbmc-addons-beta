@@ -21,8 +21,8 @@ FUNCTION_SEARCH = 'showMovies'
 
 DOC_GENRES = (True, 'showGenre')
 
-DOC_DOCS = (URL_MAIN, 'showMovies')
 DOC_NEWS = (URL_MAIN, 'showMovies')
+DOC_DOCS = ('http://', 'load')
 
 
 def load():
@@ -34,11 +34,11 @@ def load():
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DOC_NEWS[0])
-    oGui.addDir(SITE_IDENTIFIER, DOC_NEWS[1], 'Documentaires Nouveautés', 'news.png', oOutputParameterHandler)
+    oGui.addDir(SITE_IDENTIFIER, DOC_NEWS[1], 'Nouveautés', 'news.png', oOutputParameterHandler)
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', DOC_GENRES[0])
-    oGui.addDir(SITE_IDENTIFIER, DOC_GENRES[1], 'Documentaires Genre', 'genres.png', oOutputParameterHandler)
+    oGui.addDir(SITE_IDENTIFIER, DOC_GENRES[1], 'Genres', 'genres.png', oOutputParameterHandler)
 
     oGui.setEndOfDirectory()
 
