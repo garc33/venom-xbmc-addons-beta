@@ -122,6 +122,9 @@ class cRechercheHandler:
         if not sText:
             return False
         sLabel = self.getDisp()
+        if not sLabel:
+            return
+        
         sFolder =  self.getRootFolder()
         sFolder = os.path.join(sFolder, 'resources/sites')
 
