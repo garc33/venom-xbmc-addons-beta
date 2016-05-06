@@ -558,9 +558,10 @@ def showSeriesHosters():# recherche et affiche les hotes
     
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    
+
     #Fonction pour recuperer uniquement les liens
     sHtmlContent = Cutlink(sHtmlContent)
+    
     #Pour les series on fait l'inverse des films on vire les liens premiums
     if 'Premium' in sHtmlContent or 'PREMIUM' in sHtmlContent:
         sHtmlContent = CutPremiumlinks(sHtmlContent)
@@ -569,6 +570,8 @@ def showSeriesHosters():# recherche et affiche les hotes
     
     sPattern = '<a href="([^"]+?)" target="_blank">([^<]+)<\/a>|<span style="color:#.{6}">([^<]+)<\/span>'
     aResult = oParser.parse(sHtmlContent, sPattern)
+    
+
     
     if (aResult[0] == True):
         total = len(aResult[1])
@@ -686,11 +689,21 @@ def CutNonPremiumlinks(sHtmlContent):
     
 def CutPremiumlinks(sHtmlContent):
     oParser = cParser()
+    
     sPattern = '(?i)^(.+?)premium'
     aResult = oParser.parse(sHtmlContent, sPattern)
-    #print aResult
+    res = ''
     if (aResult[0]):
-        return aResult[1][0]
+        res = aResult[1][0]
+    
+    #si l'ordre a été chnage ou si il ya un probleme    
+    if 'dl-protect.com' not in res:
+        sPattern = '(?i) par .{1,2}pisode(.+?)$'
+        aResult = oParser.parse(sHtmlContent, sPattern)
+        if (aResult[0]):
+            sHtmlContent = aResult[1][0]
+    else:
+        sHtmlContent = res
 
     #Si ca marche pas on renvois le code complet
     return sHtmlContent    
