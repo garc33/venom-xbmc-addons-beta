@@ -199,6 +199,7 @@ class cGui():
         oGuiElement.setMeta(1)
         oGuiElement.setThumbnail(sThumbnail)
         oGuiElement.setFanart(sFanart)
+        oGuiElement.setCat(7)
         
         if oOutputParameterHandler.getValue('sMovieTitle'):
             sTitle = oOutputParameterHandler.getValue('sMovieTitle')
@@ -217,6 +218,7 @@ class cGui():
         oGuiElement.setMeta(2)
         oGuiElement.setThumbnail(sThumbnail)
         oGuiElement.setFanart(sFanart)
+        oGuiElement.setCat(7)
         
         if oOutputParameterHandler.getValue('sMovieTitle'):
             sTitle = oOutputParameterHandler.getValue('sMovieTitle')
@@ -591,6 +593,7 @@ class cGui():
             cDb().del_resume(meta)
         else:
             cDb().insert_watched(meta)
+            
         xbmc.executebuiltin( 'Container.Refresh' )
         
     def viewBA(self):
@@ -691,20 +694,20 @@ class cGui():
         if (cConfig().isDharma() == False):
             return
 
-	if (iSeconds == 0):
+        if (iSeconds == 0):
             iSeconds = 1000
-	else:
+        else:
             iSeconds = iSeconds * 1000
-        
+            
         xbmc.executebuiltin("Notification(%s,%s,%s)" % (cConfig().getlanguage(30308), (cConfig().getlanguage(30309) % str(sTitle)), iSeconds))
 
     def showError(self, sTitle, sDescription, iSeconds=0):
         if (cConfig().isDharma() == False):
             return
 
-	if (iSeconds == 0):
+        if (iSeconds == 0):
             iSeconds = 1000
-	else:
+        else:
             iSeconds = iSeconds * 1000
 
         xbmc.executebuiltin("Notification(%s,%s,%s)" % (str(sTitle), (str(sDescription)), iSeconds))
@@ -713,9 +716,9 @@ class cGui():
         if (cConfig().isDharma() == False):
             return
 
-	if (iSeconds == 0):
+        if (iSeconds == 0):
             iSeconds = 1000
-	else:
+        else:
             iSeconds = iSeconds * 1000
 
         xbmc.executebuiltin("Notification(%s,%s,%s)" % (str(sTitle), (str(sDescription)), iSeconds))
