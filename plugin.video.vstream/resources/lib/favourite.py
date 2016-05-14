@@ -7,7 +7,7 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.inputParameterHandler import cInputParameterHandler
 from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
-import os
+
 import urllib
 import xbmc
 
@@ -26,6 +26,7 @@ class cFav:
         
         oInputParameterHandler = cInputParameterHandler()
         siteUrl = oInputParameterHandler.getValue('siteUrl')
+        sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
 
         meta = {}      
         meta['title'] = xbmc.getInfoLabel('ListItem.title')
@@ -35,10 +36,6 @@ class cFav:
         except:
             pass
         
-        #sTitle = oInputParameterHandler.getValue('sTitle')
-        #sId = oInputParameterHandler.getValue('sId')
-        #sUrl = oInputParameterHandler.getValue('siteUrl')
-        #sFav = oInputParameterHandler.getValue('sFav')
         return
     
    
@@ -46,35 +43,50 @@ class cFav:
     def getFavourites(self):
         oGui = cGui()
 
-        row = cDb().get_countfavorite()
-        sTitle = '[COLOR khaki]Vous avez %s marque page[/COLOR]' % (str(row))
+        #Comptages des favoris
+        row = cDb().get_favorite()
+        #row = cDb().get_countfavorite()
+        compt = [0,0,0,0,0,0,0,0]
+        for i in row:
+            compt[int(i[5])] = compt[int(i[5])] + 1
+        
+        sTitle = '[COLOR khaki]Vous avez %s marque page[/COLOR]' % (len(row))
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://')
         oGui.addText(SITE_IDENTIFIER, sTitle, oOutputParameterHandler)
         
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '1')
-        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Films', 'mark.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Films (' + str(compt[1]) + ')', 'mark.png', oOutputParameterHandler)
         
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '2')
-        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Séries', 'mark.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Séries (' + str(compt[2]) + ')', 'mark.png', oOutputParameterHandler)
 
         # oOutputParameterHandler = cOutputParameterHandler()
         # oOutputParameterHandler.addParameter('sCat', '3')
         # oGui.addDir(SITE_IDENTIFIER, 'getFav()', 'Pages', 'news.png', oOutputParameterHandler)
-
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('sCat', '4')
-        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Sources', 'mark.png', oOutputParameterHandler)
-
-        oOutputParameterHandler = cOutputParameterHandler()
-        oOutputParameterHandler.addParameter('sCat', '5')
-        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Divers', 'mark.png', oOutputParameterHandler)
         
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sCat', '6')
-        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'TV', 'mark.png', oOutputParameterHandler)
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'TV (' + str(compt[6]) + ')', 'mark.png', oOutputParameterHandler)
+        
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('sCat', '4')
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Sources (' + str(compt[4]) + ')', 'mark.png', oOutputParameterHandler)
+        
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('sCat', '7')
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Recherche Visuelle (' + str(compt[7]) + ')', 'mark.png', oOutputParameterHandler)
+        
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('sCat', '5')
+        oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Divers (' + str(compt[5]) + ')', 'mark.png', oOutputParameterHandler)
+        
+        if compt[0] > 0:
+            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler.addParameter('sCat', '0')
+            oGui.addDir(SITE_IDENTIFIER, 'getFav', '[COLOR red]Erreur /!\ lien a supprimer !!! (' + str(compt[0]) + ')[/COLOR]', 'mark.png', oOutputParameterHandler)
         
         oGui.setEndOfDirectory()
 
@@ -145,7 +157,11 @@ class cFav:
     def setFavorite(self):
         oInputParameterHandler = cInputParameterHandler()
         #aParams = oInputParameterHandler.getAllParameter()
-        #print oInputParameterHandler.getAllParameter()
+        #xbmc.log(str(oInputParameterHandler.getAllParameter()))
+        
+        if int(oInputParameterHandler.getValue('sCat')) < 1:
+            cConfig().showInfo('Error','Mise en Favoris non possible pour ce lien')
+            return
         
         meta = {}
         meta['siteurl'] = oInputParameterHandler.getValue('siteUrl')
