@@ -37,15 +37,13 @@ class cFav:
             pass
         
         return
-    
-   
-     
+  
     def getFavourites(self):
         oGui = cGui()
 
         #Comptages des favoris
         row = cDb().get_favorite()
-        #row = cDb().get_countfavorite()
+
         compt = [0,0,0,0,0,0,0,0]
         for i in row:
             compt[int(i[5])] = compt[int(i[5])] + 1
@@ -83,6 +81,7 @@ class cFav:
         oOutputParameterHandler.addParameter('sCat', '5')
         oGui.addDir(SITE_IDENTIFIER, 'getFav', 'Divers (' + str(compt[5]) + ')', 'mark.png', oOutputParameterHandler)
         
+        #A virer dans les versions future, pour le moment c'est juste pr supprimer les liens bugges
         if compt[0] > 0:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('sCat', '0')
@@ -149,14 +148,12 @@ class cFav:
                         
                     #oGui.addFav(site, function, title, "mark.png", thumbnail, fanart, oOutputParameterHandler)
                
-            
             oGui.setEndOfDirectory()
         except: pass
         return
         
     def setFavorite(self):
         oInputParameterHandler = cInputParameterHandler()
-        #aParams = oInputParameterHandler.getAllParameter()
         #xbmc.log(str(oInputParameterHandler.getAllParameter()))
         
         if int(oInputParameterHandler.getValue('sCat')) < 1:
