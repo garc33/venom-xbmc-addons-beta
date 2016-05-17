@@ -436,24 +436,25 @@ class cGui():
         oListItem.addContextMenuItems(aContextMenus)
         
         #Menu speciaux si metadata
-        if  oGuiElement.getTrailerUrl(): 
-            oOutputParameterHandler = cOutputParameterHandler()
-            oOutputParameterHandler.addParameter('sHosterIdentifier', 'youtube')
-            oOutputParameterHandler.addParameter('sMediaUrl', oGuiElement.getTrailerUrl())
-            oOutputParameterHandler.addParameter('sFileName', oGuiElement.getTitle())
-            oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
-            oContextItem = cContextElement()
-            oContextItem.setFile('cHosterGui')
-            oContextItem.setSiteName('cHosterGui')
-            oContextItem.setTitle('[COLOR azure]Bande Annonce[/COLOR]')
-            oContextItem.setFunction('play')
-            oContextItem.setOutputParameterHandler(oOutputParameterHandler)
+        #supprimer depuis la recherche interne de bande annonce
+        # if  oGuiElement.getTrailerUrl(): 
+            # oOutputParameterHandler = cOutputParameterHandler()
+            # oOutputParameterHandler.addParameter('sHosterIdentifier', 'youtube')
+            # oOutputParameterHandler.addParameter('sMediaUrl', oGuiElement.getTrailerUrl())
+            # oOutputParameterHandler.addParameter('sFileName', oGuiElement.getTitle())
+            # oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
+            # oContextItem = cContextElement()
+            # oContextItem.setFile('cHosterGui')
+            # oContextItem.setSiteName('cHosterGui')
+            # oContextItem.setTitle('[COLOR azure]Bande Annonce[/COLOR]')
+            # oContextItem.setFunction('play')
+            # oContextItem.setOutputParameterHandler(oOutputParameterHandler)
             
-            oOutputParameterHandler = oContextItem.getOutputParameterHandler()
-            sParams = oOutputParameterHandler.getParameterAsUri()
-            sTest = '%s?site=%s&function=%s&%s' % (sPluginPath, oContextItem.getFile(), oContextItem.getFunction(), sParams)
-            aContextMenus+= [ ( oContextItem.getTitle(), "XBMC.RunPlugin(%s)" % (sTest,),)]
-            oListItem.addContextMenuItems(aContextMenus)
+            # oOutputParameterHandler = oContextItem.getOutputParameterHandler()
+            # sParams = oOutputParameterHandler.getParameterAsUri()
+            # sTest = '%s?site=%s&function=%s&%s' % (sPluginPath, oContextItem.getFile(), oContextItem.getFunction(), sParams)
+            # aContextMenus+= [ ( oContextItem.getTitle(), "XBMC.RunPlugin(%s)" % (sTest,),)]
+            # oListItem.addContextMenuItems(aContextMenus)
         
         return oListItem
         
