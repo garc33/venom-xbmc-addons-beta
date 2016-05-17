@@ -283,6 +283,10 @@ def ClassicCaptcha(sHtmlContent,cookies,url,headers):
         sHtmlContent = reponse.read()
         reponse.close()
         
+        if '<td align=center> Please enter the characters from the picture to see the links </td>' in sHtmlContent:
+            cGui().showInfo("Erreur", 'Mauvais Captcha' , 5)
+            return 'rate'
+        
         return sHtmlContent
 
         
