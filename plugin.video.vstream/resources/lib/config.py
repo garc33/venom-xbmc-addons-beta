@@ -3,6 +3,7 @@ import sys
 import xbmc
 import xbmcplugin
 import xbmcgui
+import xbmcaddon
 
 class cConfig():
 
@@ -218,6 +219,11 @@ class cConfig():
         TextBox()
         
     def WindowsBoxes(self, sTitle, sFileName, num,year = ''):
+    
+        
+        if (xbmcaddon.Addon('script.extendedinfo') and self.getSetting('extendedinfo-view') == 'true'):
+            xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedinfo, name=%s)' % sFileName)
+            return
         
         if self.getSetting('meta-view') == 'true':
             xbmc.executebuiltin("Action(Info)")

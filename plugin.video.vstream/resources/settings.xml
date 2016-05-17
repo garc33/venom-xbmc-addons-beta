@@ -7,6 +7,7 @@
         <setting id="playerType" type="enum" values="Auto|MPlayer|DVDPlayer" label="30001" default="2"/>
         <setting id="meta-view" type="bool" label="Recherche les Métadonnées (ralenti l'Addon)" default="false"/>
         <setting label="Paramètres des Métadonnées" type="action" option="close" action="XBMC.RunScript(special://home/addons/plugin.video.vstream/resources/lib/runscript.py, metahandler)" />
+        <setting id="extendedinfo-view" type="bool" label="Utiliser extendedinfo" default="false"/>
         <setting id="home-view" type="bool" label="Afficher l'Accueil par Catégories" default="true"/>
         <setting id="param_timeout" label="30027" type="number" default="1000"/>
         <setting id="history-view" type="bool" label="Activer l'historique de recherche" default="true"/>
