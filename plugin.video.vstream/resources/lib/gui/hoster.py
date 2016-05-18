@@ -276,6 +276,8 @@ class cHosterGui:
             return cHosterHandler().getHoster('idowatch')
         if ('wstream.' in sHosterUrl):
             return cHosterHandler().getHoster('wstream')
+        if ('veevr.' in sHosterUrl):
+            return cHosterHandler().getHoster('veevr')
 
         #Lien telechargeable a convertir en stream
         if ('1fichier' in sHosterUrl):
