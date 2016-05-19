@@ -222,6 +222,7 @@ class cConfig():
     
         
         if (xbmcaddon.Addon('script.extendedinfo') and self.getSetting('extendedinfo-view') == 'true'):
+            self.showInfo('vStream', 'Lancement de ExtendInfo')
             xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedinfo, name=%s)' % sFileName)
             return
         
