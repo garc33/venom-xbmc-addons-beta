@@ -19,7 +19,7 @@ def GetHtml(url, postdata = None):
     if postdata != None:
         headers['X-Requested-With'] = 'XMLHttpRequest'
         headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
-        headers['Referer'] = 'http://www.jheberg.net/redirect/les-tinytoons-s01e03-the-wheel-o-comedy/Jeodrive/'
+        headers['Referer'] = 'http://www.jheberg.net/redirect/xxxxxx/yyyyyy/'
     elif 'www.jheberg.net' in url:
         headers['Referer'] = url.replace('http://www.jheberg.net/mirrors','http://www.jheberg.net/captcha')
     
