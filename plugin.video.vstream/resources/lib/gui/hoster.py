@@ -278,6 +278,8 @@ class cHosterGui:
             return cHosterHandler().getHoster('wstream')
         if ('veevr.' in sHosterUrl):
             return cHosterHandler().getHoster('veevr')
+        if ('watchvideo.' in sHosterUrl):
+             return cHosterHandler().getHoster('watchvideo')
         if ('drive.google.com' in sHosterUrl):
             return cHosterHandler().getHoster('googledrive')
         if ('docs.google.com' in sHosterUrl):
