@@ -270,6 +270,7 @@ class cDb:
     def del_favorite(self, meta):
         siteUrl = urllib.quote_plus(meta['siteurl'])
         title = self.str_conv(meta['title'])
+        title = title.replace("'", r"''")       
 
         sql_select = "DELETE FROM favorite WHERE siteurl = '%s' AND title = '%s'" % (siteUrl,title)
 
