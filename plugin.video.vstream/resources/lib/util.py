@@ -107,8 +107,8 @@ class cUtil:
                     pass
             return text # leave as is
         return re.sub("&#?\w+;", fixup, text)
-            
-            
+           
+           
     def CleanName(self,name):
         #vire accent et '\'
         try:
