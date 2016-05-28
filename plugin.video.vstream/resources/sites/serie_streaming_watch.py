@@ -144,7 +144,7 @@ def showMovies(sSearch=''):
             oOutputParameterHandler.addParameter('siteUrl', str(aEntry[0]))
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)            
-            oGui.addMovie(SITE_IDENTIFIER, 'ShowEpisode', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
+            oGui.addTV(SITE_IDENTIFIER, 'ShowEpisode', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
            
         cConfig().finishDialog(dialog)
  
@@ -198,7 +198,7 @@ def ShowEpisode():
             oOutputParameterHandler.addParameter('siteUrl', aEntry[0])
             oOutputParameterHandler.addParameter('sMovieTitle', sTitle)
             oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)            
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
+            oGui.addTV(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
            
         cConfig().finishDialog(dialog)
  
@@ -241,7 +241,7 @@ def showHosters():
                 oOutputParameterHandler.addParameter('siteUrl', aEntry[2])
                 oOutputParameterHandler.addParameter('sMovieTitle', sMovieTitle)
                 oOutputParameterHandler.addParameter('sThumbnail', sThumbnail)            
-                oGui.addMovie(SITE_IDENTIFIER, 'serieHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
+                oGui.addTV(SITE_IDENTIFIER, 'serieHosters', sDisplayTitle, '', sThumbnail, '', oOutputParameterHandler)
            
         cConfig().finishDialog(dialog)
  
@@ -268,7 +268,8 @@ def serieHosters():
         cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
     oGui.setEndOfDirectory()
-    
+
+
 def ProtectstreamBypass(url):
     
     #lien commencant par VID_
@@ -290,6 +291,8 @@ def ProtectstreamBypass(url):
                    'Host' : 'www.protect-stream.com',
                    'Referer': Codedurl ,
                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                   #'Accept-Encoding' : 'gzip, deflate',
+                   #'Accept-Language' : 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
                    'Content-Type': 'application/x-www-form-urlencoded'}
                    
         postdata = urllib.urlencode( { 'k': aResult[1][0] } )
@@ -304,11 +307,22 @@ def ProtectstreamBypass(url):
         data = response.read()
         response.close()
         
-        #recherche du lien
+        #Test de fonctionnement
+        aResult = oParser.parse(data, sPattern)
+        if aResult[0]:
+            cGui().showInfo("Erreur", 'Lien encore protege' , 5) 
+            return ''
+        
+        #recherche du lien embed
         sPattern = '<iframe src=["\']([^<>"\']+?)["\']'
         aResult = oParser.parse(data, sPattern)
-        
         if (aResult[0] == True):
             return aResult[1][0]
+            
+        #recherche d'un lien redirigee
+        sPattern = '<a class=.button. href=["\']([^<>"\']+?)["\'] target=._blank.>'
+        aResult = oParser.parse(data, sPattern)
+        if (aResult[0] == True):
+            return aResult[1][0]        
             
     return ''
