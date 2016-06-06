@@ -222,8 +222,14 @@ class cConfig():
     
         
         if (xbmcaddon.Addon('script.extendedinfo') and self.getSetting('extendedinfo-view') == 'true'):
-            self.showInfo('vStream', 'Lancement de ExtendInfo')
-            xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedinfo, name=%s)' % sFileName)
+            if num == "2":
+                self.showInfo('vStream', 'Lancement de ExtendInfo')
+                xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedtvinfo, name=%s)' % sFileName)
+            elif num == "1":
+                self.showInfo('vStream', 'Lancement de ExtendInfo')
+                xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedinfo, name=%s)' % sFileName)
+            else:
+                xbmc.executebuiltin("Action(Info)")      
             return
         
         if self.getSetting('meta-view') == 'true':
@@ -246,6 +252,9 @@ class cConfig():
             except:
                 xbmc.executebuiltin("Action(Info)")
                 return
+        else:
+            xbmc.executebuiltin("Action(Info)")
+            return
         
 
         if (not meta['imdb_id']):

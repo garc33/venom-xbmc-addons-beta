@@ -154,8 +154,10 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler.addParameter('siteUrl', sMainUrl + str(sUrl2))
             oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle2))
             oOutputParameterHandler.addParameter('sMainUrl', sMainUrl)
- 
-            oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, 'films.png', '', '', oOutputParameterHandler)
+            if "id=26" in sUrl:
+                oGui.addMisc(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, 'doc.png', "", "", oOutputParameterHandler)
+            else:
+                oGui.addMovie(SITE_IDENTIFIER, 'showHosters', sDisplayTitle, 'films.png', '', '', oOutputParameterHandler)
  
         cConfig().finishDialog(dialog)
            

@@ -104,7 +104,10 @@ class cGui():
         
         oGuiElement.setDescription(sDesc)
         
-        self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
+        if oOutputParameterHandler.getValue('sMovieTitle'):
+            sTitle = oOutputParameterHandler.getValue('sMovieTitle')
+            oGuiElement.setFileName(sTitle)
+        
         
         self.addFolder(oGuiElement, oOutputParameterHandler)
         
@@ -262,14 +265,22 @@ class cGui():
         if cGui.CONTENT == "movies":
             self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
             self.createContexMenuSimil(oGuiElement, oOutputParameterHandler)
+            self.createContexMenuba(oGuiElement, oOutputParameterHandler)
             self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
             self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
 
         elif cGui.CONTENT == "tvshows":
             self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
             self.createContexMenuSimil(oGuiElement, oOutputParameterHandler)
+            self.createContexMenuba(oGuiElement, oOutputParameterHandler)
             self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
             self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
+            
+        elif cGui.CONTENT == "files":
+            self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
+            self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
+            self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
+            
 
         oListItem = self.__createContextMenu(oGuiElement, oListItem)
        
@@ -354,14 +365,18 @@ class cGui():
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
         oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
-        
-        self.CreateSimpleMenu(oGuiElement,oOutputParameterHandler,'cGui',oGuiElement.getSiteName(),'viewBA','[COLOR azure]Bande annonce[/COLOR]')
-        
         oOutputParameterHandler.addParameter('sId', oGuiElement.getSiteName())
         oOutputParameterHandler.addParameter('sMeta', oGuiElement.getMeta())
         
         self.CreateSimpleMenu(oGuiElement,oOutputParameterHandler,'cGui',oGuiElement.getSiteName(),'viewinfo','[COLOR azure]Information[/COLOR]')
         
+    def createContexMenuba(self, oGuiElement, oOutputParameterHandler= ''):
+
+        oOutputParameterHandler = cOutputParameterHandler()
+        oOutputParameterHandler.addParameter('sTitle', oGuiElement.getTitle())
+        oOutputParameterHandler.addParameter('sFileName', oGuiElement.getFileName())
+        
+        self.CreateSimpleMenu(oGuiElement,oOutputParameterHandler,'cGui',oGuiElement.getSiteName(),'viewBA','[COLOR azure]Bande annonce[/COLOR]')        
 
     
     def createContexMenuSimil(self, oGuiElement, oOutputParameterHandler= ''):
