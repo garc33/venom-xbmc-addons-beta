@@ -8,7 +8,12 @@
         <setting id="meta-view" type="bool" label="Recherche les Métadonnées (ralenti l'Addon)" default="false"/>
         <setting label="Paramètres des Métadonnées" type="action" option="close" action="XBMC.RunScript(special://home/addons/plugin.video.vstream/resources/lib/runscript.py, metahandler)" />
         <setting id="extendedinfo-view" type="bool" label="Utiliser extendedinfo" default="false"/>
+        <setting type="sep"/>
         <setting id="home-view" type="bool" label="Afficher l'Accueil par Catégories" default="true"/>
+        <setting id="default-view" type="number" label="30406" default="50"/>
+        <setting id="movie-view" type="number" label="30404" default="500"/>
+        <setting id="serie-view" type="number" label="30405" default="500"/>
+        <setting type="sep"/>
         <setting id="param_timeout" label="30027" type="number" default="1000"/>
         <setting id="history-view" type="bool" label="Activer l'historique de recherche" default="true"/>
         

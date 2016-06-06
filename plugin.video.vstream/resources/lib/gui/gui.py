@@ -108,6 +108,9 @@ class cGui():
             sTitle = oOutputParameterHandler.getValue('sMovieTitle')
             oGuiElement.setFileName(sTitle)
         
+        self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
+        self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
+        self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
         
         self.addFolder(oGuiElement, oOutputParameterHandler)
         
@@ -275,11 +278,7 @@ class cGui():
             self.createContexMenuba(oGuiElement, oOutputParameterHandler)
             self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
             self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
-            
-        elif cGui.CONTENT == "files":
-            self.createContexMenuWatch(oGuiElement, oOutputParameterHandler)
-            self.createContexMenuinfo(oGuiElement, oOutputParameterHandler)
-            self.createContexMenuFav(oGuiElement, oOutputParameterHandler)
+
             
 
         oListItem = self.__createContextMenu(oGuiElement, oListItem)
@@ -511,6 +510,15 @@ class cGui():
         xbmcplugin.setContent(iHandler, cGui.CONTENT)
         xbmcplugin.addSortMethod(iHandler, xbmcplugin.SORT_METHOD_NONE)
         xbmcplugin.endOfDirectory(iHandler, True)
+        #reglage vue
+        #50 = liste / 51 grande liste / 500 icone / 501 gallerie / 508 fanart / 
+        if cGui.CONTENT == "movies":
+            #xbmc.executebuiltin('Container.SetViewMode(507)')
+            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('movie-view'))
+        elif cGui.CONTENT == "tvshows":
+            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('serie-view'))           
+        elif cGui.CONTENT == "files":
+            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('default-view'))
 
     def updateDirectory(self):
         xbmc.executebuiltin("Container.Refresh")
