@@ -11,6 +11,7 @@ from resources.lib.handler.outputParameterHandler import cOutputParameterHandler
 from resources.lib.db import cDb
 import os
 import urllib
+import xbmc
 
 SITE_IDENTIFIER = 'cHome'
 SITE_NAME = 'Home'
@@ -26,6 +27,7 @@ color_videos = cConfig().getSetting('color_videos')
 color_replaytvs = cConfig().getSetting('color_replaytvs')
 
 class cHome:
+        
 
     def load(self):
         oGui = cGui()
@@ -102,6 +104,8 @@ class cHome:
             oGui.addDir(SITE_IDENTIFIER, 'showUpdate', '[COLOR green]Mise a jour disponible[/COLOR]', 'update.png', oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
+        if (cConfig().getSetting("active-view") == 'true'):
+            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('accueil-view'))
 
     def showUpdate(self):
         try:

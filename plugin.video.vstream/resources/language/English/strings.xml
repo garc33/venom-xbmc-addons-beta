@@ -91,8 +91,10 @@
     <string id="30402">Password</string>
     <string id="30403">Activate</string>
     
-    <string id="30404">View : Movies (recommandé 50-51-500-501-508) </string>
-    <string id="30405">View: Tvshow (recommandé 50-51-500-501-508) </string>
-    <string id="30406">View: Default (recommandé 50-51-500) </string>
+    <string id="30404">View : Movies (recommended 50-51-500-501-508) </string>
+    <string id="30405">View: Tvshow (recommended 50-51-500-501-508) </string>
+    <string id="30406">View: Default (recommended 50-51-500) </string>
+    <string id="30407">Vue: Home (recommended 50-51-500) </string>
+    <string id="30408">Enable customized view</string>
         
 </strings>

@@ -512,13 +512,14 @@ class cGui():
         xbmcplugin.endOfDirectory(iHandler, True)
         #reglage vue
         #50 = liste / 51 grande liste / 500 icone / 501 gallerie / 508 fanart / 
-        if cGui.CONTENT == "movies":
-            #xbmc.executebuiltin('Container.SetViewMode(507)')
-            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('movie-view'))
-        elif cGui.CONTENT == "tvshows":
-            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('serie-view'))           
-        elif cGui.CONTENT == "files":
-            xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('default-view'))
+        if (cConfig().getSetting("active-view") == 'true'):
+            if cGui.CONTENT == "movies":
+                #xbmc.executebuiltin('Container.SetViewMode(507)')
+                xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('movie-view'))
+            elif cGui.CONTENT == "tvshows":
+                xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('serie-view'))           
+            elif cGui.CONTENT == "files":
+                xbmc.executebuiltin('Container.SetViewMode(%s)' % cConfig().getSetting('default-view'))
 
     def updateDirectory(self):
         xbmc.executebuiltin("Container.Refresh")
