@@ -5,6 +5,8 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
+DIALOG2 = None
+
 class cConfig():
 
     COUNT = 0
@@ -139,22 +141,34 @@ class cConfig():
         return qst
         
     def createDialog(self, sSite):
-        oDialog = xbmcgui.DialogProgress()
-        oDialog.create(sSite)  
-        return oDialog
+        if DIALOG2 == None:
+            oDialog = xbmcgui.DialogProgress()
+            oDialog.create(sSite)
+            global DIALOG2
+            DIALOG2 = oDialog
+            return oDialog
+        else: return DIALOG2
 
     def updateDialog(self, dialog, total):
+        if xbmcgui.Window(10101).getProperty('search') != 'true':
+            iPercent = int(float(cConfig.COUNT * 100) / total)
+            dialog.update(iPercent, 'Chargement: '+str(cConfig.COUNT)+'/'+str(total))
+            cConfig.COUNT += 1
+        
+    def updateDialogSearch(self, dialog, total, site):
         iPercent = int(float(cConfig.COUNT * 100) / total)
-        dialog.update(iPercent, 'Chargement: '+str(cConfig.COUNT)+'/'+str(total))
+        dialog.update(iPercent, 'Chargement: '+str(site))
         cConfig.COUNT += 1
 
     def updateDialog2(self, dialog, label = ''):
         dialog.update(0, 'Chargement: '+str(label))
 
     def finishDialog(self, dialog):
-        dialog.close()
-        del dialog
-        return False
+        if xbmcgui.Window(10101).getProperty('search') != 'true':
+            dialog.close()
+            xbmc.log('\t[PLUGIN] Vstream: close dialog')
+            del dialog
+            return False
         
     def showInfo(self, sTitle, sDescription, iSeconds=0):
         if (self.__bIsDharma == False):
