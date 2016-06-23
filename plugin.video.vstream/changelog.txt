@@ -3,15 +3,11 @@
 - Question & Support: https://github.com/LordVenom/venom-xbmc-addons/issues
 - Suivez les mises a jour en direct : Twitter @lordvenom57
 =============================================================================
-                      Merci aux généreux donateurs
-- Mor17.
-- Yoann.
-- Stéphane G.
-- Sylvain L.
-- Daniel L.
-- Jean Charles A.
+Merci aux généreux donateurs
+- Mor17, Yoann, Stéphane G, Sylvain L, Daniel L, Jean Charles A, 3DWorld, David M.
 =============================================================================
-- Merci au contributeur de la bêta. FreeFighter77/mino60/zombiB/chataigne73/Kodigoal
+Merci au contributeur de la bêta. 
+- FreeFighter77/mino60/zombiB/chataigne73/Kodigoal
 =============================================================================
 =============================================================================
 - Merci à http://libretv.me/ pour le partage de leurs sources.
