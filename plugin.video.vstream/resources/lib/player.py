@@ -18,11 +18,13 @@ class cPlayer(xbmc.Player):
         
         oInputParameterHandler = cInputParameterHandler()
         #aParams = oInputParameterHandler.getAllParameter()
+        #xbmc.log(str(aParams))
         
         self.sHosterIdentifier = oInputParameterHandler.getValue('sHosterIdentifier')
         self.sTitle = oInputParameterHandler.getValue('sTitle')
         #self.sSite = oInputParameterHandler.getValue('site')
         self.sSite = oInputParameterHandler.getValue('siteUrl')
+        self.sThumbnail = xbmc.getInfoLabel('ListItem.Art(thumb)')
         
     def clearPlayList(self):
         oPlaylist = self.__getPlayList()
@@ -44,9 +46,17 @@ class cPlayer(xbmc.Player):
         sPluginHandle = cPluginHandler().getPluginHandle();
         #meta = oGuiElement.getInfoLabel()
         meta = {'label': sTitle, 'title': sTitle}
-        item = xbmcgui.ListItem(path=sUrl, iconImage="DefaultVideo.png")
+        item = xbmcgui.ListItem(path=sUrl, iconImage="DefaultVideo.png",  thumbnailImage=self.sThumbnail)
+        
         item.setInfo( type="Video", infoLabels= meta )
-        xbmcplugin.setResolvedUrl(sPluginHandle, True, item)
+        
+        sPlayerType = self.__getPlayerType()
+        xbmcPlayer = xbmc.Player(sPlayerType)
+        
+        if (cConfig().getSetting("playerPlay") == '0'):
+            xbmcPlayer.play( sUrl, item )
+        else:
+            xbmcplugin.setResolvedUrl(sPluginHandle, True, item)
         
         while not xbmc.abortRequested:
             try: 

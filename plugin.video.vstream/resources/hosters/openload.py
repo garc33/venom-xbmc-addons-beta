@@ -104,7 +104,7 @@ class cHoster(iHoster):
         #sPattern = "<video(?:.|\s)*?<script\s[^>]*?>.+?<\/script>\s<script\s[^>]*?>((?:.|\s)*?)<\/"
         
         aResult = oParser.parse(sHtmlContent, sPattern)
-        xbmc.log(str(aResult))
+        #xbmc.log(str(aResult))
         
         #ok on a maintenant 4 liens
         vid = 'XXXXXX'
