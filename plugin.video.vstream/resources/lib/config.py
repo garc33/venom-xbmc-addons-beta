@@ -234,8 +234,14 @@ class cConfig():
         
     def WindowsBoxes(self, sTitle, sFileName, num,year = ''):
     
-        
-        if (xbmcaddon.Addon('script.extendedinfo') and self.getSetting('extendedinfo-view') == 'true'):
+        extendedinfo = False
+        try:
+            if (xbmcaddon.Addon('script.extendedinfo') and self.getSetting('extendedinfo-view') == 'true'):
+                extendedinfo = True
+        except:
+            pass
+            
+        if (extendedinfo):
             if num == "2":
                 self.showInfo('vStream', 'Lancement de ExtendInfo')
                 xbmc.executebuiltin('XBMC.RunScript(script.extendedinfo, info=extendedtvinfo, name=%s)' % sFileName)
