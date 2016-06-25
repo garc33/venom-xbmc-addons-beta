@@ -16,6 +16,13 @@
     <string id="30027">Waiting time for player (ms)</string>
     <string id="30028">PVR addon setting</string>
     <string id="30029">Play default</string>
+    <string id="30030">Play</string>
+    <string id="30031">Métadata</string>
+    <string id="30032">View</string>
+    <string id="30033">Tool</string>
+    <string id="30034">About</string>
+    <string id="30035">Support Us</string>
+    <string id="30036">Changelog</string>
 
     <string id="30076">Search</string>
     <string id="30077">Search 1</string>
@@ -63,7 +70,7 @@
     <!--version 3.0.4 -->
     <string id="30125">Research Update (source only)</string>
     <string id="30126">Beta Tester (not recommended)</string>
-    <string id="30127">Tool</string>
+    <string id="30127">Tool/About</string>
     <string id="30128">Clear Cache Addon</string>
     <string id="30129">Clear Cache Addon</string>
     <!--version 3.0.5 -->
