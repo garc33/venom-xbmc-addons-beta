@@ -58,6 +58,9 @@ class cPlayer(xbmc.Player):
         else:
             xbmcplugin.setResolvedUrl(sPluginHandle, True, item)
         
+        timer = int(cConfig().getSetting('param_timeout'))
+        xbmc.sleep(timer)
+        
         while not xbmc.abortRequested:
             try: 
                self.currentTime = self.getTime()
