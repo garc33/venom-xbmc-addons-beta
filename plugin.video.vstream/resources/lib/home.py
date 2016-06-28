@@ -284,7 +284,8 @@ class cHome:
         for aPlugin in aPlugins:
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-            oGui.addDir(aPlugin[1], 'load', aPlugin[0], 'host.png', oOutputParameterHandler)
+            icon = '/sites/%s.png' % (aPlugin[1])
+            oGui.addDir(aPlugin[1], 'load', aPlugin[0], icon, oOutputParameterHandler)
 
         oGui.setEndOfDirectory()
 
@@ -468,7 +469,8 @@ class cHome:
                 #exec "sSiteUrl = "+aPlugin[1]+"."+sVar
                 oOutputParameterHandler = cOutputParameterHandler()
                 oOutputParameterHandler.addParameter('siteUrl', aPlugin[0])
-                oGui.addDir(aPlugin[2], aPlugin[3], '[COLOR '+sColor+']'+aPlugin[1]+'[/COLOR]', sIcon, oOutputParameterHandler)
+                icon = '/sites/%s.png' % (aPlugin[2])
+                oGui.addDir(aPlugin[2], aPlugin[3], '[COLOR '+sColor+']'+aPlugin[1]+'[/COLOR]', icon, oOutputParameterHandler)
             except:
                 pass
 
