@@ -92,7 +92,7 @@ class cHome:
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')
-        oGui.addDir('cLibrary', 'getLibrary', 'Librairie beta', 'library.png', oOutputParameterHandler)
+        oGui.addDir('cLibrary', 'getLibrary', 'Librairie', 'library.png', oOutputParameterHandler)
 
         oOutputParameterHandler = cOutputParameterHandler()
         oOutputParameterHandler.addParameter('siteUrl', 'http://venom')

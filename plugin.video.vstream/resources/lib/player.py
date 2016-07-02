@@ -76,24 +76,13 @@ class cPlayer(xbmc.Player):
         timer = int(cConfig().getSetting('param_timeout'))
         xbmc.sleep(timer)            
 
-        while not xbmc.abortRequested:
-            try: 
-               self.currentTime = self.getTime()
-               self.totalTime = self.getTotalTime()
-            except: break
-            xbmc.sleep(1000)
+        # while not xbmc.abortRequested:
+            # try: 
+               # self.currentTime = self.getTime()
+               # self.totalTime = self.getTotalTime()
+            # except: break
+            # xbmc.sleep(1000)
 
-        # dirty, but is works 
-        if (cConfig().isDharma() == False):
-            oInputParameterHandler = cInputParameterHandler()
-            aParams = oInputParameterHandler.getAllParameter()
-
-            oGui = cGui()
-            oGuiElement = cGuiElement()
-            oGuiElement.setSiteName(aParams['site'])
-            oGuiElement.setFunction(aParams['function'])
-            oGui.addFolder(oGuiElement)
-            oGui.setEndOfDirectory()
 
     def onPlayBackEnded( self ):
         try:
