@@ -13,7 +13,6 @@ from resources.lib.util import cUtil
 import re
 import xbmc
 
-#src="http://opentostream.com/embed.php?vid=617ef5adb" 
 
 SITE_IDENTIFIER = 'mareplaytv'
 SITE_NAME = 'MaReplayTV'
@@ -105,10 +104,6 @@ def showMovies(sSearch = ''):
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request()
-    
-    #fh = open('c:\\test.txt', "w")
-    #fh.write(sHtmlContent)
-    #fh.close()
 
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
@@ -182,10 +177,26 @@ def showHosters():
         for aEntry in aResult[1]:
 
             sHosterUrl = str(aEntry)
+            
+            if 'opentostream.com' in sHosterUrl:
+                oRequestHandler = cRequestHandler(sHosterUrl)
+                sHtmlContent = oRequestHandler.request()
+                
+                #fh = open('c:\\test.txt', "w")
+                #fh.write(sHtmlContent)
+                #fh.close()
+                
+                sPattern = '<iframe.+?src="([^"]+)"'
+                aResult = oParser.parse(sHtmlContent, sPattern)
+                if (aResult[0] == True):
+                    sHosterUrl = aResult[1][0]
+
             oHoster = cHosterGui().checkHoster(sHosterUrl)
+            
+            sDisplayTitle = cUtil().DecoTitle(sMovieTitle)
 
             if (oHoster != False):
-                oHoster.setDisplayName(sMovieTitle)
+                oHoster.setDisplayName(sDisplayTitle)
                 oHoster.setFileName(sMovieTitle)
                 cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
