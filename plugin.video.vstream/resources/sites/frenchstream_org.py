@@ -361,7 +361,7 @@ def showLag():
         
     oGui.setEndOfDirectory()
     
-def showPlt():
+def showAne():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
