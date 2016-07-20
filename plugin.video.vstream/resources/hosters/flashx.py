@@ -157,6 +157,7 @@ class cHoster(iHoster):
         aResult = re.findall(sPattern,sHtmlContent)
         
         if not aResult:
+            xbmc.log("page bloquee")
 
             #On recupere la bonne url
             sGoodUrl = web_url
@@ -164,7 +165,6 @@ class cHoster(iHoster):
             #on recupere la page de refresh
             sPattern = 'reload the page! <a href="([^"]+)">!! <b>'
             aResult = re.findall(sPattern,sHtmlContent)
-            xbmc.log(str(aResult))
             if not aResult:
                 return False,False
             sRefresh = aResult[0]
@@ -175,8 +175,8 @@ class cHoster(iHoster):
             if not aResult:
                 return False,False
             
-            #on debloque la page
-            sHtmlContent = self.GetRedirectHtml(aResult[0],sId)
+            #on debloque la page (en test ca a l'air inutile)
+            #sHtmlContent = self.GetRedirectHtml(aResult[0],sId)
             
             #on rafraichi la page
             sHtmlContent = self.GetRedirectHtml(sRefresh,sId)
