@@ -236,16 +236,39 @@ def showHosters():
     #print 'apres ' + sMovieTitle
  
     dialog3 = xbmcgui.Dialog()
-    ret = dialog3.select('Recherche',['zone_telechargement','film_streaming','kepliz','Movieshd'])
+    ret = dialog3.select('Recherche',['V stream','zone_telechargement','film_streaming','kepliz','Movieshd'])
  
-    if ret == 1:
+    if ret == 0:
+        VstreamSearch(sMovieTitle)
+    elif ret == 1:
         zone_telechargementSearch(sMovieTitle)
     elif ret == 2:
         film_streamingSearch(sMovieTitle + sExtraTitle)
     elif ret == 3:
         keplizSearch(sMovieTitle + sExtraTitl)
     elif ret == 4:
-        movieshdSearch(sMovieTitle + sExtraTitle)                
+        movieshdSearch(sMovieTitle + sExtraTitle)
+        
+def VstreamSearch(sMovieTitle):
+    
+    oGui = cGui()
+    oInputParameterHandler = cInputParameterHandler()
+    sUrl = oInputParameterHandler.getValue('siteUrl')
+    
+    #Type de recherche
+    sDisp = oInputParameterHandler.getValue('disp')
+
+    if not(sDisp):
+        sDisp = 'search1'
+        if sUrl != 'none':
+            sDisp = 'search2'
+    
+    oHandler = cRechercheHandler()
+    oHandler.setText(sMovieTitle)
+    oHandler.setDisp(sDisp)
+    aPlugins = oHandler.getAvailablePlugins()
+                
+    oGui.setEndOfDirectory()        
  
 def zone_telechargementSearch(sMovieTitle):
     oGui = cGui()
