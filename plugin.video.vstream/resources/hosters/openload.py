@@ -5,33 +5,18 @@ from resources.lib.config import cConfig
 from resources.lib.jjdecode import JJDecoder
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
-from resources.lib.aadecode import AADecoder
-import re,urllib2
+from resources.lib.gui.gui import cGui
+import re,urllib2, base64, math
 
+#https://github.com/jcrocholl/pypng/blob/master/lib/png.py
+from resources.lib.png import Reader
+#or more powerfull https://github.com/Scondo/purepng/blob/master/code/png/png.py
 import xbmc
 
-#Merci a cmos pour son code
-#Convert from decimal to any base number
-#http://code.activestate.com/recipes/65212-convert-from-decimal-to-any-base-number/
-def base10toN(num, n):
-    """Change a  to a base-n number.
-    Up to base-36 is supported without special notation."""
-    
-    new_num_string = ''
-    current = num
+#If you want to use this code, don't forget the credit this time, thx.
 
-    while current != 0:
-        remainder = current % n
-        if 36 > remainder > 9:
-            remainder_string = chr(remainder + 87)
-        elif remainder >= 36:
-            remainder_string = '(' + str(remainder) + ')'
-        else:
-            remainder_string = str(remainder)
-        new_num_string = remainder_string + new_num_string
-        current = current / n
-    return new_num_string
-
+def parseInt(sin):
+    return int(''.join([c for c in re.split(r'[,.]',str(sin))[0] if c.isdigit()])) if re.match(r'\d+', str(sin), re.M) and not callable(sin) else None
 
 class cHoster(iHoster):
 
@@ -88,99 +73,197 @@ class cHoster(iHoster):
 
     def __getMediaLinkForGuest(self):
         
-        oRequest = cRequestHandler(self.__sUrl)
+        headers = {
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0',
+            #'Referer' : url ,
+            'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+            #'Accept-Encoding' : 'gzip, deflate, br',
+            #'Accept-Charset' : '',
+            }
+        
+        api_call = ''
+        
+        oParser = cParser()        
+        
+        #recuperation donnee codage, non utilise encore, j'attend de voir ce qu'ils vont chnager
+        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/final.js")
         sHtmlContent = oRequest.request()
+        
+        #recuperation de la page
+        xbmc.log(self.__sUrl)
+
+        request = urllib2.Request(self.__sUrl,None,headers)
+        try: 
+            reponse = urllib2.urlopen(request)
+        except urllib2.URLError, e:
+            cGui().showInfo("Erreur", 'Probleme site' , 5)
+            xbmc.log( str(e.reason))
+            xbmc.log( e.read())
+            return False,False
+        sHtmlContent = reponse.read()
+        reponse.close()
+        
+        linkimg = ""
+        sPattern = '<img id="linkimg" src="data:image\/png;base64,(.+?)">'
+        aResult = oParser.parse(sHtmlContent, sPattern)
+        if (aResult[0]):
+            linkimg = aResult[1][0]
         
         #fh = open('c:\\test.txt', "w")
         #fh.write(sHtmlContent)
         #fh.close()
         
-        #Debut des tests de decodage
-        oParser = cParser()
-        string = ''
-       
-        #"aaencode - Encode any JavaScript program to Japanese style emoticons (^_^)"
-        sPattern = '<script type="text\/javascript">(ﾟωﾟ.+?)<\/script>'
-        #sPattern = "<video(?:.|\s)*?<script\s[^>]*?>.+?<\/script>\s<script\s[^>]*?>((?:.|\s)*?)<\/"
+        TabUrl = []
+        subscribers = []
+
+
+        decoded = base64.decodestring(linkimg)
         
+        #g = open("c://out.png", "wb")
+        #g.write(decoded)
+        #g.close()
+        
+        #return width, height, pixels and image metadata
+        r = Reader(pixels=decoded)
+        Png_Data = r.read()
+        #xbmc.log(str(Png_Data[2]))
+        
+        tabpixelchar = ''
+        for i in Png_Data[2]:
+            tabpixelchar = tabpixelchar + chr(i)
+            
+        #xbmc.log(str(tabpixelchar))
+        
+        j = 0;
+        tab2 = []
+        for i in tabpixelchar:
+            v = (j + 1) % 4
+            v = v and (i != "\x00")
+            tab2.append(v)
+            j= j + 1
+        
+        # parsed = document.getElementById(linkimg)
+        # buff = document.getElementById(canvas).getContext("2d");
+
+        # #buff[_0xcd25[5]](parsed, 0, 0);
+        # var subscriptions = [].map.call(buff.getImageData(0, 0, parsed.width, parsed.height)["data"], function(deepDataAndEvents) {
+          # return String.fromCharCode(deepDataAndEvents);
+        # }).filter(function(dataAndEvents, deepDataAndEvents) {
+          # return(deepDataAndEvents + 1) % 4 && dataAndEvents !== "\x00";
+        # }).join("");
+        
+        #recuperation cle
+        cle = ''
+        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/numbers.js")
+        sHtmlContent = oRequest.request()
+        sPattern = "window\.signatureNumbers='([^']+)'"
         aResult = oParser.parse(sHtmlContent, sPattern)
-        #xbmc.log(str(aResult))
+        if (aResult[0]):
+            cle = aResult[1][0]
         
-        #ok on a maintenant 4 liens
-        vid = 'XXXXXX'
-        string2 = []
-        for aEntry in aResult[1]:
-            s = AADecoder(aEntry).decode()
-            #xbmc.log(s)
-            string2.append(s)
-            
-            if 'welikekodi_ya_rly' in s:
-                c0 = re.search('welikekodi_ya_rly = ([^<>;"]+);', s)
-                if c0:
-                    c = c0.group(1)
-                    c = c.replace('Math.round','int')
-                    #xbmc.log('calcul : ' + c )
-                    cc = str(eval(c))
-                    vid = '[' + cc + ']'
-                    #xbmc.log('resultat : ' + vid )
         
-        for string3 in string2:
-            if ('toString' in string3) and (vid in string3):
-                
-                #xbmc.log(string3)
-                
-                base = int(re.findall('toString\(a\+([0-9]+)\)',string3)[0])
-                table = re.findall('(\([0-9][^)]+\))',string3)
-                
-                for str1 in table:
-                    val = re.findall('([0-9]+),([0-9]+)',str1)
-                    base2 = base + int(val[0][0])
-                    str2 = base10toN(int(val[0][1]), base2)
-                    string3 = string3.replace(str1, str2)
-                
-                #xbmc.log(string3)
-                
-                #nettoyage
-                string3 = string3.replace('+', '')
-                string3 = string3.replace('"', '')
-                string3 = string3.replace('', '')
-
-                #bidouille pour pas avoir a tout recoder
-                q = re.findall('(http[^<>}]+)',string3)
-                if not q:
-                    q = re.findall('return (\/\/[^<>}]+)',string3)
-                    url = 'http:' + q[0]
-                else:
-                    url = q[0]
-                string = 'src="' + url + '?mime=true"'
- 
-        if not (string): 
-            #Dean Edwards Packer
-            sPattern = "(\s*eval\s*\(\s*function(?:.|\s)+?)<\/script>"
-            aResult = oParser.parse(sHtmlContent, sPattern)
-            if (aResult[0] == True):
-                sUnpacked = cPacker().unpack(aResult[1][0])
-                string = JJDecoder(sUnpacked).decode()
-
-        if (string):
-            sContent = string.replace('\\','')
+        
+        tab3 = []
+        nbr = int(len(tabpixelchar) / (20 * 10))
+        pattern = ".{1," + str(nbr * 20) + "}"
+        r1 = re.findall(pattern, tabpixelchar)
+        
+        pattern = ".{1,20}"
+        for i in r1:
+            r2 = re.findall(pattern, i)
+            #TODO correct this hack
+            if '\x00' not in r2[0]:
+                tab3.append(r2)
+        
+        tabcle = []
+        nbr = int(len(cle) / (26 * 10))
+        pattern = ".{1," + str(nbr * 26) + "}"
+        r2 = re.findall(pattern, cle)
+        
+        pattern = ".{1,26}"
+        for i in r2:
+            r2 = re.findall(pattern, i)
+            tabcle.append(r2)
+        
+        currentValue = 0
+        id = 0
+        i = 0
+        
+        subscribers = []
+        
+        while (id < len(tab3) ):
             
-            api_call = ''
+            #http://www.dotnetperls.com/2d-python
+            subscribers.append([])
+            subscribers[id] = []
+            
+            stri = "1" * id
 
-            sPattern = 'src=\s*?"(.*?)\?'
-            aResult = oParser.parse(sContent, sPattern)
-            
-            #print aResult
-            
-            if (aResult[0] == True):
-                api_call = aResult[1][0]
+            if re.match('^1?$|^(11+?)\1+$',stri,re.IGNORECASE):
+                id += 1
+                continue
                 
-            if not api_call:
-                sPattern = 'window\.vr *=["\'](.+?)["\']'
-                aResult = oParser.parse(sContent, sPattern)
-                if (aResult[0] == True):
-                    api_call = aResult[1][0]
+            currentValue = 99
+        
+            i = 0
+            while (i < len(tabcle) ):
 
+                recordName = 0
+                    
+                while (recordName < len(tabcle[id][i]) ):
+                    if (currentValue > 122):
+                        currentValue = 98
+
+                    vv = chr(int(math.floor(currentValue)))
+                    
+                    if (tabcle[id][i][recordName] == vv) :
+                       
+                        #if (subscribers[id][i]):
+                        if (len(subscribers[id]) > i ):
+                            recordName +=1
+                            continue
+                            
+                        currentValue += 2.5
+                        
+                        try:
+                            subscribers[id].append(tab3[id][i][recordName])
+                        except:
+                            pass
+                            
+                        
+                    recordName +=1
+              
+                i = i + 1 
+            
+            id = id + 1
+        
+        
+        
+        TabUrl = []
+        
+
+        id = 0;
+        while (id < 10):
+            stri = "1" * id
+            if not re.match('^1?$|^(11+?)\1+$',stri,re.IGNORECASE):
+                v = "".join(subscribers[id]).replace(',','')
+                TabUrl.append(v)
+            id = id +1
+        
+
+        streamurl = TabUrl[2] + "~" + TabUrl[1] + "~" + TabUrl[3] + "~" + TabUrl[0]
+                
+        # if (!Array(id + 1).join(1).match(/^1?$|^(11+?)\1+$/)) {
+        # TabUrl.push(subscribers[id].filter(function(dataAndEvents) {
+          # return dataAndEvents !== ',';
+        # }).join(""));
+        
+        api_call = "https://openload.co/stream/" + streamurl + "?mime=true"
+        
+        xbmc.log(api_call)
+        return False
+        
         if (api_call):
             
             if 'openload.co/stream' in api_call:
@@ -196,4 +279,3 @@ class cHoster(iHoster):
             return True, api_call
             
         return False, False
-        
