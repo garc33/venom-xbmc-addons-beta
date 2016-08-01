@@ -60,6 +60,7 @@ class cHoster(iHoster):
 
     def setUrl(self, sUrl):
         self.__sUrl = str(sUrl)
+        self.__sUrl = self.__sUrl.replace('openload.io','openload.co')
         #self.__sUrl = self.__sUrl.replace('/embed/', '/f/')
 
     def checkUrl(self, sUrl):
@@ -92,7 +93,6 @@ class cHoster(iHoster):
         
         #recuperation de la page
         xbmc.log(self.__sUrl)
-
         request = urllib2.Request(self.__sUrl,None,headers)
         try: 
             reponse = urllib2.urlopen(request)
@@ -103,6 +103,11 @@ class cHoster(iHoster):
             return False,False
         sHtmlContent = reponse.read()
         reponse.close()
+        
+        #fh = open('c:\\openload2.htm', "r")
+        #sHtmlContent = fh.read()
+        #fh.close()
+        
         
         linkimg = ""
         sPattern = '<img id="linkimg" src="data:image\/png;base64,(.+?)">'
@@ -246,13 +251,15 @@ class cHoster(iHoster):
         id = 0;
         while (id < 10):
             stri = "1" * id
-            if not re.match('^1?$|^(11+?)\1+$',stri,re.IGNORECASE):
+            #if not re.match('^1?$|^(11+?)\1+$',stri):
+            if str(id) in '2357':
                 v = "".join(subscribers[id]).replace(',','')
                 TabUrl.append(v)
             id = id +1
         
-
-        streamurl = TabUrl[2] + "~" + TabUrl[1] + "~" + TabUrl[3] + "~" + TabUrl[0]
+        xbmc.log(str(TabUrl))
+        
+        streamurl = TabUrl[3] + "~" + TabUrl[1] + "~" + TabUrl[2] + "~" + TabUrl[0]
                 
         # if (!Array(id + 1).join(1).match(/^1?$|^(11+?)\1+$/)) {
         # TabUrl.push(subscribers[id].filter(function(dataAndEvents) {
@@ -279,3 +286,9 @@ class cHoster(iHoster):
             return True, api_call
             
         return False, False
+#ok       
+#https://openload.co/stream/W3ezr58LlA~1470158180~31.38.0.0~J8Ei6mhj?mime=true
+#test
+#https://openload.co/stream/87wKd08YQ5~1470159379~31.38.0.0~iChmaufS?mime=true 
+#['eMKfGK_k', '1470158339', 'x8k.I', '31.38.0.0', 'TO9s', '87wKd08YQ5', '.OBK', 'k.'] 
+#5 1 3 0
