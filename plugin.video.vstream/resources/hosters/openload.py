@@ -74,40 +74,24 @@ class cHoster(iHoster):
 
     def __getMediaLinkForGuest(self):
         
-        headers = {
-            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0',
-            #'Referer' : url ,
-            'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
-            #'Accept-Encoding' : 'gzip, deflate, br',
-            #'Accept-Charset' : '',
-            }
+        UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
         
         api_call = ''
         
         oParser = cParser()        
         
-        #recuperation donnee codage, non utilise encore, j'attend de voir ce qu'ils vont chnager
-        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/final.js")
-        sHtmlContent = oRequest.request()
-        
         #recuperation de la page
-        xbmc.log(self.__sUrl)
-        request = urllib2.Request(self.__sUrl,None,headers)
-        try: 
-            reponse = urllib2.urlopen(request)
-        except urllib2.URLError, e:
-            cGui().showInfo("Erreur", 'Probleme site' , 5)
-            xbmc.log( str(e.reason))
-            xbmc.log( e.read())
-            return False,False
-        sHtmlContent = reponse.read()
-        reponse.close()
-        
+        xbmc.log('url teste : ' + self.__sUrl)
+        oRequest = cRequestHandler(self.__sUrl)
+        oRequest.addHeaderEntry('User-Agent',UA)
+        sHtmlContent = oRequest.request()
         #fh = open('c:\\openload2.htm', "r")
         #sHtmlContent = fh.read()
         #fh.close()
         
+        #fh = open('c:\\test.txt', "w")
+        #fh.write(sHtmlContent)
+        #fh.close()
         
         linkimg = ""
         sPattern = '<img id="linkimg" src="data:image\/png;base64,(.+?)">'
@@ -115,13 +99,30 @@ class cHoster(iHoster):
         if (aResult[0]):
             linkimg = aResult[1][0]
         
-        #fh = open('c:\\test.txt', "w")
-        #fh.write(sHtmlContent)
-        #fh.close()
+        #recuperation cle
+        cle = ''
+        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/numbers.js")
+        oRequest.addHeaderEntry('Referer',self.__sUrl)
+        oRequest.addHeaderEntry('User-Agent',UA)
+        sHtmlContent = oRequest.request()
+
+        sPattern = "window\.signatureNumbers='([^']+)'"
+        aResult = oParser.parse(sHtmlContent, sPattern)
+        if (aResult[0]):
+            cle = aResult[1][0]
+           
+        #recuperation donnee codage, non utilise encore, j'attend de voir ce qu'ils vont chnager
+        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/final.js")
+        oRequest.addHeaderEntry('Referer',self.__sUrl)
+        oRequest.addHeaderEntry('User-Agent',UA)
+        sHtmlContent = oRequest.request()
+        
+        #-------------------------------------
+        #          Debut algorythme
+        #-------------------------------------
         
         TabUrl = []
         subscribers = []
-
 
         decoded = base64.decodestring(linkimg)
         
@@ -132,13 +133,10 @@ class cHoster(iHoster):
         #return width, height, pixels and image metadata
         r = Reader(pixels=decoded)
         Png_Data = r.read()
-        #xbmc.log(str(Png_Data[2]))
         
         tabpixelchar = ''
         for i in Png_Data[2]:
             tabpixelchar = tabpixelchar + chr(i)
-            
-        #xbmc.log(str(tabpixelchar))
         
         j = 0;
         tab2 = []
@@ -148,27 +146,7 @@ class cHoster(iHoster):
             tab2.append(v)
             j= j + 1
         
-        # parsed = document.getElementById(linkimg)
-        # buff = document.getElementById(canvas).getContext("2d");
 
-        # #buff[_0xcd25[5]](parsed, 0, 0);
-        # var subscriptions = [].map.call(buff.getImageData(0, 0, parsed.width, parsed.height)["data"], function(deepDataAndEvents) {
-          # return String.fromCharCode(deepDataAndEvents);
-        # }).filter(function(dataAndEvents, deepDataAndEvents) {
-          # return(deepDataAndEvents + 1) % 4 && dataAndEvents !== "\x00";
-        # }).join("");
-        
-        #recuperation cle
-        cle = ''
-        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/numbers.js")
-        sHtmlContent = oRequest.request()
-        sPattern = "window\.signatureNumbers='([^']+)'"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if (aResult[0]):
-            cle = aResult[1][0]
-        
-        
-        
         tab3 = []
         nbr = int(len(tabpixelchar) / (20 * 10))
         pattern = ".{1," + str(nbr * 20) + "}"
@@ -199,7 +177,6 @@ class cHoster(iHoster):
         
         while (id < len(tab3) ):
             
-            #http://www.dotnetperls.com/2d-python
             subscribers.append([])
             subscribers[id] = []
             
@@ -212,7 +189,7 @@ class cHoster(iHoster):
             currentValue = 99
         
             i = 0
-            while (i < len(tabcle) ):
+            while (i <= len(tabcle) ):
 
                 recordName = 0
                     
@@ -224,7 +201,6 @@ class cHoster(iHoster):
                     
                     if (tabcle[id][i][recordName] == vv) :
                        
-                        #if (subscribers[id][i]):
                         if (len(subscribers[id]) > i ):
                             recordName +=1
                             continue
@@ -242,15 +218,13 @@ class cHoster(iHoster):
                 i = i + 1 
             
             id = id + 1
-        
-        
-        
+
         TabUrl = []
-        
 
         id = 0;
         while (id < 10):
             stri = "1" * id
+            #TODO : why this fucking regex don't work ???
             #if not re.match('^1?$|^(11+?)\1+$',stri):
             if str(id) in '2357':
                 v = "".join(subscribers[id]).replace(',','')
@@ -260,21 +234,15 @@ class cHoster(iHoster):
         xbmc.log(str(TabUrl))
         
         streamurl = TabUrl[3] + "~" + TabUrl[1] + "~" + TabUrl[2] + "~" + TabUrl[0]
-                
-        # if (!Array(id + 1).join(1).match(/^1?$|^(11+?)\1+$/)) {
-        # TabUrl.push(subscribers[id].filter(function(dataAndEvents) {
-          # return dataAndEvents !== ',';
-        # }).join(""));
         
         api_call = "https://openload.co/stream/" + streamurl + "?mime=true"
         
         xbmc.log(api_call)
-        return False
         
         if (api_call):
             
             if 'openload.co/stream' in api_call:
-                UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
+                
                 headers = {'User-Agent': UA }
                           
                 req = urllib2.Request(api_call,None,headers)
@@ -286,9 +254,3 @@ class cHoster(iHoster):
             return True, api_call
             
         return False, False
-#ok       
-#https://openload.co/stream/W3ezr58LlA~1470158180~31.38.0.0~J8Ei6mhj?mime=true
-#test
-#https://openload.co/stream/87wKd08YQ5~1470159379~31.38.0.0~iChmaufS?mime=true 
-#['eMKfGK_k', '1470158339', 'x8k.I', '31.38.0.0', 'TO9s', '87wKd08YQ5', '.OBK', 'k.'] 
-#5 1 3 0
