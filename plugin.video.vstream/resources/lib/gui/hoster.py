@@ -287,7 +287,9 @@ class cHosterGui:
         if ('drive.google.com' in sHosterUrl):
             return cHosterHandler().getHoster('googledrive')
         if ('docs.google.com' in sHosterUrl):
-            return cHosterHandler().getHoster('googledrive')          
+            return cHosterHandler().getHoster('googledrive')
+        if ('vidwatch' in sHosterUrl):
+            return cHosterHandler().getHoster('vidwatch')        
 
         #Lien telechargeable a convertir en stream
         if ('1fichier' in sHosterUrl):
