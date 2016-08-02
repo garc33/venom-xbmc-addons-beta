@@ -1,4 +1,7 @@
 #coding: utf-8
+#
+#Vstream : https://github.com/LordVenom/venom-xbmc-addon
+#
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.config import cConfig
