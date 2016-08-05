@@ -173,3 +173,18 @@ class cUtil:
         
         #reconvertion utf-8
         return string.encode('utf-8')
+
+
+    def EvalJSString(self,s):
+        s = s.replace(' ','')
+        try:
+            s = s.replace('!+[]','1').replace('!![]','1').replace('[]','0')
+            s = re.sub(r'(\([^()]+)\+\[\]\)','(\\1)*10)',s)  # si le bloc fini par +[] >> *10
+            s = re.sub(r'\[([^\]]+)\]','str(\\1)',s)
+            # s = s.replace('[','(').replace(']',')')
+            if s[0]=='+':
+                s = s[1:]
+            val = int(eval(s))
+            return val
+        except:
+            return 0
