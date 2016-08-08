@@ -272,8 +272,7 @@ def showMovies(sSearch = ''):
         sSearch = urllib.quote_plus(sSearch).upper() #passe en majuscule et remplace espace par +
 
         url = URL_MAIN + 'resultat+' + sSearch + '.html'
-        
-        xbmc.log(url)
+        #xbmc.log(url)
 
         headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0',
         'Referer' : URL_MAIN}
@@ -570,7 +569,7 @@ def showHosters():
                 except:
                     pass
                     
-            xbmc.log( 'fini :' + str(sHosterUrl)) 
+            #xbmc.log( 'fini :' + str(sHosterUrl)) 
             
             #oHoster = __checkHoster(sHosterUrl)
             oHoster = cHosterGui().checkHoster(sHosterUrl)
