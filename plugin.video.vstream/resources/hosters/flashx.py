@@ -195,7 +195,6 @@ class cHoster(iHoster):
         if (aResult):
             xbmc.log( "lien code")
             sUnpacked = cPacker().unpack(aResult[0])
-            xbmc.log(sUnpacked)
             sHtmlContent = sUnpacked  
   
         #decodage classique
