@@ -145,11 +145,15 @@ class cUtil:
         return name
         
     def FormatSerie(self,string):
+        
+        #vire doubles espaces
+        string = re.sub(' +',' ',string)
+        
         #convertion unicode
         string = string.decode("utf-8")
         
         SXEX = ''
-        m = re.search( r'(?i)(\wpisode ([0-9]+))',string,re.UNICODE)
+        m = re.search( ur'(?i)(\wpisode ([0-9]+))(?:$| [^a\u00E0])',string,re.UNICODE)
         if m:
             #ok y a des episodes
             string = string.replace(m.group(1),'')
@@ -173,8 +177,7 @@ class cUtil:
         
         #reconvertion utf-8
         return string.encode('utf-8')
-
-
+        
     def EvalJSString(self,s):
         s = s.replace(' ','')
         try:
