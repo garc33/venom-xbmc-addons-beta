@@ -30,6 +30,8 @@ URL_MAIN = 'http://www.zone-telechargement.com/'
 URL_SEARCH_MOVIES = (URL_MAIN + 'films-gratuit.html?q=', 'showMovies')
 URL_SEARCH_SERIES = (URL_MAIN + 'telecharger-series.html?q=', 'showMovies')
 URL_SEARCH_SHOWS = (URL_MAIN + 'spectacles.html?q=', 'showMovies')
+URL_SEARCH_ANIMS = (URL_MAIN + 'animes.html?q=', 'showMovies')
+
 URL_SEARCH = (URL_MAIN + 'index.php?q=', 'showMovies')
 
 FUNCTION_SEARCH = 'showMovies'
@@ -89,7 +91,11 @@ def load():
     
     oOutputParameterHandler = cOutputParameterHandler() 
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    oGui.addDir(SITE_IDENTIFIER, 'showSearchShows', 'Recherche de spectacles', 'search.png', oOutputParameterHandler) 
+    oGui.addDir(SITE_IDENTIFIER, 'showSearchShows', 'Recherche de spectacles', 'search.png', oOutputParameterHandler)
+    
+    oOutputParameterHandler = cOutputParameterHandler() 
+    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
+    oGui.addDir(SITE_IDENTIFIER, 'showSearchAnimes', 'Recherche d\'animes', 'search.png', oOutputParameterHandler)
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', MOVIE_EXCLUS[0])
@@ -192,7 +198,7 @@ def showSearchMovies():
         sUrl = URL_SEARCH_MOVIES[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
         showMovies(sUrl) 
         oGui.setEndOfDirectory()
-        return  
+        return
     
 def showSearchSeries(): 
     oGui = cGui()
@@ -201,7 +207,7 @@ def showSearchSeries():
         sUrl = URL_SEARCH_SERIES[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
         showMovies(sUrl) 
         oGui.setEndOfDirectory()
-        return  
+        return
 
 def showSearchShows(): 
     oGui = cGui()
@@ -210,7 +216,16 @@ def showSearchShows():
         sUrl = URL_SEARCH_SHOWS[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
         showMovies(sUrl) 
         oGui.setEndOfDirectory()
-        return      
+        return
+        
+def showSearchAnimes(): 
+    oGui = cGui()
+    sSearchText = oGui.showKeyBoard() 
+    if (sSearchText != False):
+        sUrl = URL_SEARCH_ANIMS[0] + sSearchText +'&tab=all&orderby_by=popular&orderby_order=desc&displaychangeto=thumb'
+        showMovies(sUrl) 
+        oGui.setEndOfDirectory()
+        return        
     
 def showGenreMovies(): 
     showGenre("films-gratuit.html")
