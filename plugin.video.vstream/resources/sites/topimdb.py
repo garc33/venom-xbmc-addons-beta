@@ -148,12 +148,12 @@ def showMovies(sSearch = ''):
         #sHtmlContent = oRequestHandler.request()
         #sHtmlContent = sHtmlContent.replace('<span class="runtime">', '').replace('</span>','')
    
-    #fh = open('c:\\test.txt', "w")
-    #fh.write(sHtmlContent)
-    #fh.close()
+    fh = open('c:\\test.txt', "w")
+    fh.write(sHtmlContent)
+    fh.close()
  
     #sPattern = '<td class="number">(.*?)<\/td>.*?class="image">.*?<a href=".+?" title=".+?"><img src="(.*?)" alt="(.*?)" title=".*?".*?<a href="([^<]+)">.*?<\/a>'
-    sPattern = '<td class="number">(.*?)</td>.*?<img src="(.*?)".*?<a href="/title/.*?">(.*?)</a>.*?<span class="year_type">(.*?)</span><br>.*?<div class="rating rating-list".*?title="Users rated this (.*?\/)'  
+    sPattern = '<span class="lister-item-index unbold text-primary">([^<]+)<\/span> *<a href="([^"]+)">([^<]+)<\/a>.+?src="([^"]+)"'  
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
    
