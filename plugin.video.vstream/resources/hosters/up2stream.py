@@ -3,7 +3,9 @@ from resources.lib.parser import cParser
 from resources.lib.config import cConfig
 from resources.hosters.hoster import iHoster
 import re,urllib2
-import xbmcgui
+import xbmcgui,xbmc
+
+from resources.lib.packer import cPacker
 
 class cHoster(iHoster):
 
@@ -60,20 +62,28 @@ class cHoster(iHoster):
     def __getMediaLinkForGuest(self):
 
         api_call =''
-        
-        #print self.__sUrl
-        
+
         oRequest = cRequestHandler(self.__sUrl)
         sHtmlContent = oRequest.request()
         
-        sPattern = '<source src="([^"]+)" type="video'
+        #xbmc.log(str(self.__sUrl))
         
         oParser = cParser()
+        sPattern = '(eval\(function\(p,a,c,k,e(?:.|\s)+?\))<\/script>'
+        
         aResult = oParser.parse(sHtmlContent, sPattern)
+        
         if (aResult[0] == True):
+            sHtmlContent = cPacker().unpack(aResult[1][0])
+        
+        #xbmc.log(str(sHtmlContent))
+        
+        sPattern = '\("src","([^"]+)"\)'
+        aResult = oParser.parse(sHtmlContent, sPattern)
+        if (aResult[0]):
             api_call = aResult[1][0]
         
-        #print api_call
+        #xbmc.log(str(api_call))
         
         if (api_call):
             return True, api_call
