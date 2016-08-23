@@ -20,7 +20,6 @@ import xbmc
 
 from resources.lib.dl_deprotect import DecryptDlProtect
 
-
 SITE_IDENTIFIER = 'zone_telechargement_com' 
 SITE_NAME = '[COLOR violet]Zone-telechargement[/COLOR]' 
 SITE_DESC = 'Fichier en DDL, HD' 
@@ -238,29 +237,29 @@ def showGenre(basePath):
     
     liste = []
     liste.append( ['Action',URL_MAIN + basePath + '?genrelist[]=1'] )
-    liste.append( ['Animation',URL_MAIN +  basePath + '?genrelist[]=2'] )
-    liste.append( ['Arts Martiaux',URL_MAIN +  basePath + '?genrelist[]=3'] )
-    liste.append( ['Aventure',URL_MAIN +  basePath + '?genrelist[]=4'] )
-    liste.append( ['Biopic',URL_MAIN +  basePath + '?genrelist[]=5'] )
-    liste.append( ['Comedie Dramatique',URL_MAIN +  basePath + '?genrelist[]=7'] )
-    liste.append( ['Comedie Musicale',URL_MAIN +  basePath + '?genrelist[]=8'] )
-    liste.append( ['Comedie',URL_MAIN +  basePath + '?genrelist[]=9'] )
-    liste.append( ['Divers',URL_MAIN +  basePath + '?genrelist[]=10'] )
-    liste.append( ['Documentaires',URL_MAIN +  basePath + '?genrelist[]=11'] )
-    liste.append( ['Drame',URL_MAIN +  basePath + '?genrelist[]=12'] )
-    liste.append( ['Epouvante Horreur',URL_MAIN +  basePath + '?genrelist[]=13'] ) 
-    liste.append( ['Espionnage',URL_MAIN +  basePath + '?genrelist[]=14'] )
-    liste.append( ['Famille',URL_MAIN +  basePath + '?genrelist[]=15'] )
-    liste.append( ['Fantastique',URL_MAIN +  basePath + '?genrelist[]=16'] )  
-    liste.append( ['Guerre',URL_MAIN +  basePath + '?genrelist[]=17'] )
-    liste.append( ['Historique',URL_MAIN +  basePath + '?genrelist[]=18'] )
-    liste.append( ['Musical',URL_MAIN +  basePath + '?genrelist[]=19'] )
-    liste.append( ['Peplum',URL_MAIN +  basePath + '?genrelist[]=6'] )
-    liste.append( ['Policier',URL_MAIN +  basePath + '?genrelist[]=20'] )
-    liste.append( ['Romance',URL_MAIN +  basePath + '?genrelist[]=21'] )
-    liste.append( ['Science Fiction',URL_MAIN +  basePath + '?genrelist[]=22'] )
-    liste.append( ['Thriller',URL_MAIN +  basePath + '?genrelist[]=23'] )
-    liste.append( ['Western',URL_MAIN +  basePath + '?genrelist[]=24'] )
+    liste.append( ['Animation',URL_MAIN +  basePath + 'genrelist[]=2'] )
+    liste.append( ['Arts Martiaux',URL_MAIN +  basePath + 'genrelist[]=3'] )
+    liste.append( ['Aventure',URL_MAIN +  basePath + 'genrelist[]=4'] )
+    liste.append( ['Biopic',URL_MAIN +  basePath + 'genrelist[]=5'] )
+    liste.append( ['Comedie Dramatique',URL_MAIN +  basePath + 'genrelist[]=7'] )
+    liste.append( ['Comedie Musicale',URL_MAIN +  basePath + 'genrelist[]=8'] )
+    liste.append( ['Comedie',URL_MAIN +  basePath + 'genrelist[]=9'] )
+    liste.append( ['Divers',URL_MAIN +  basePath + 'genrelist[]=10'] )
+    liste.append( ['Documentaires',URL_MAIN +  basePath + 'genrelist[]=11'] )
+    liste.append( ['Drame',URL_MAIN +  basePath + 'genrelist[]=12'] )
+    liste.append( ['Epouvante Horreur',URL_MAIN +  basePath + 'genrelist[]=13'] ) 
+    liste.append( ['Espionnage',URL_MAIN +  basePath + 'genrelist[]=14'] )
+    liste.append( ['Famille',URL_MAIN +  basePath + 'genrelist[]=15'] )
+    liste.append( ['Fantastique',URL_MAIN +  basePath + 'genrelist[]=16'] )  
+    liste.append( ['Guerre',URL_MAIN +  basePath + 'genrelist[]=17'] )
+    liste.append( ['Historique',URL_MAIN +  basePath + 'genrelist[]=18'] )
+    liste.append( ['Musical',URL_MAIN +  basePath + 'genrelist[]=19'] )
+    liste.append( ['Peplum',URL_MAIN +  basePath + 'genrelist[]=6'] )
+    liste.append( ['Policier',URL_MAIN +  basePath + 'genrelist[]=20'] )
+    liste.append( ['Romance',URL_MAIN +  basePath + 'genrelist[]=21'] )
+    liste.append( ['Science Fiction',URL_MAIN +  basePath + 'genrelist[]=22'] )
+    liste.append( ['Thriller',URL_MAIN +  basePath + 'genrelist[]=23'] )
+    liste.append( ['Western',URL_MAIN +  basePath + 'genrelist[]=24'] )
                 
     for sTitle,sUrl in liste:
         
@@ -669,8 +668,12 @@ def Display_protected_link():
         sHtmlContent = DecryptDlProtect(sUrl) 
         
         if sHtmlContent:
-            sPattern_dlprotect = '><a href="(.+?)" target="_blank">'
-            aResult_dlprotect = oParser.parse(sHtmlContent, sPattern_dlprotect)
+            #Si redirection
+            if sHtmlContent.startswith('http'):
+                aResult_dlprotect = (True, [sHtmlContent])
+            else:
+                sPattern_dlprotect = '><a href="(.+?)" target="_blank">'
+                aResult_dlprotect = oParser.parse(sHtmlContent, sPattern_dlprotect)
             
         else:
             oDialog = cConfig().createDialogOK('Desole, probleme de captcha.\n Veuillez en rentrer un directement sur le site, le temps de reparer')
