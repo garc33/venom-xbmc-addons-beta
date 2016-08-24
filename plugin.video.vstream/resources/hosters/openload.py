@@ -1,7 +1,4 @@
 #coding: utf-8
-#
-#Vstream : https://github.com/LordVenom/venom-xbmc-addon
-#
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.parser import cParser
 from resources.lib.config import cConfig
@@ -9,14 +6,12 @@ from resources.lib.jjdecode import JJDecoder
 from resources.hosters.hoster import iHoster
 from resources.lib.packer import cPacker
 from resources.lib.gui.gui import cGui
+from resources.lib.util import cUtil
+
+
 import re,urllib2, base64, math
 
-#https://github.com/jcrocholl/pypng/blob/master/lib/png.py
-from resources.lib.png import Reader
-#or more powerfull https://github.com/Scondo/purepng/blob/master/code/png/png.py
 import xbmc
-
-#If you want to use this code, don't forget the credit this time, thx.
 
 def parseInt(sin):
     return int(''.join([c for c in re.split(r'[,.]',str(sin))[0] if c.isdigit()])) if re.match(r'\d+', str(sin), re.M) and not callable(sin) else None
@@ -76,7 +71,7 @@ class cHoster(iHoster):
         return self.__getMediaLinkForGuest()
 
     def __getMediaLinkForGuest(self):
-        
+
         UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
         
         api_call = ''
@@ -88,157 +83,32 @@ class cHoster(iHoster):
         oRequest = cRequestHandler(self.__sUrl)
         oRequest.addHeaderEntry('User-Agent',UA)
         sHtmlContent = oRequest.request()
-        #fh = open('c:\\openload2.htm', "r")
-        #sHtmlContent = fh.read()
-        #fh.close()
         
         #fh = open('c:\\test.txt', "w")
         #fh.write(sHtmlContent)
         #fh.close()
         
-        linkimg = ""
-        sPattern = '<img id="linkimg" src="data:image\/png;base64,(.+?)">'
+        sPattern = '<span id="hiddenurl">(.+?)<\/span>'
         aResult = oParser.parse(sHtmlContent, sPattern)
-        if (aResult[0]):
-            linkimg = aResult[1][0]
         
-        #recuperation cle
-        cle = ''
-        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/n.js")
-        oRequest.addHeaderEntry('Referer',self.__sUrl)
-        oRequest.addHeaderEntry('User-Agent',UA)
-        sHtmlContent = oRequest.request()
+        if not (aResult[0]):
+            return False,False
 
-        sPattern = "window\.signatureNumbers='([^']+)'"
-        aResult = oParser.parse(sHtmlContent, sPattern)
-        if (aResult[0]):
-            cle = aResult[1][0]
-           
-        #recuperation donnee codage, non utilise encore, j'attend de voir ce qu'ils vont chnager
-        oRequest = cRequestHandler("https://openload.co/assets/js/obfuscator/final.js")
-        oRequest.addHeaderEntry('Referer',self.__sUrl)
-        oRequest.addHeaderEntry('User-Agent',UA)
-        sHtmlContent = oRequest.request()
+        string = aResult[1][0]
         
-        #-------------------------------------
-        #          Debut algorythme
-        #-------------------------------------
+        string = cUtil().unescape(string)
         
-        TabUrl = []
-        subscribers = []
-
-        decoded = base64.decodestring(linkimg)
+        url = ''
         
-        #g = open("c://out.png", "wb")
-        #g.write(decoded)
-        #g.close()
-        
-        #return width, height, pixels and image metadata
-        r = Reader(pixels=decoded)
-        Png_Data = r.read()
-        
-        tabpixelchar = ''
-        for i in Png_Data[2]:
-            tabpixelchar = tabpixelchar + chr(i)
-        
-        j = 0;
-        tab2 = []
-        for i in tabpixelchar:
-            v = (j + 1) % 4
-            v = v and (i != "\x00")
-            tab2.append(v)
-            j= j + 1
+        for c in string:
+            v = ord(c)
+            if v >= 33 and v <= 126:
+                v = ((v + 14) % 94) + 33
+            url = url + chr(v)
         
 
-        tab3 = []
-        nbr = int(len(tabpixelchar) / (20 * 10))
-        pattern = ".{1," + str(nbr * 20) + "}"
-        r1 = re.findall(pattern, tabpixelchar)
         
-        pattern = ".{1,20}"
-        for i in r1:
-            r2 = re.findall(pattern, i)
-            #TODO correct this hack
-            if '\x00' not in r2[0]:
-                tab3.append(r2)
-        
-        tabcle = []
-        nbr = int(len(cle) / (26 * 10))
-        pattern = ".{1," + str(nbr * 26) + "}"
-        r2 = re.findall(pattern, cle)
-        
-        pattern = ".{1,26}"
-        for i in r2:
-            r2 = re.findall(pattern, i)
-            tabcle.append(r2)
-        
-        currentValue = 0
-        id = 0
-        i = 0
-        
-        subscribers = []
-        
-        while (id < len(tab3) ):
-            
-            subscribers.append([])
-            subscribers[id] = []
-            
-            stri = "1" * id
-
-            if re.match('^1?$|^(11+?)\1+$',stri,re.IGNORECASE):
-                id += 1
-                continue
-                
-            currentValue = 99
-        
-            i = 0
-            while (i <= len(tabcle) ):
-
-                recordName = 0
-                    
-                while (recordName < len(tabcle[id][i]) ):
-                    if (currentValue > 122):
-                        currentValue = 98
-
-                    vv = chr(int(math.floor(currentValue)))
-                    
-                    if (tabcle[id][i][recordName] == vv) :
-                       
-                        if (len(subscribers[id]) > i ):
-                            recordName +=1
-                            continue
-                            
-                        currentValue += 2.5
-                        
-                        try:
-                            subscribers[id].append(tab3[id][i][recordName])
-                        except:
-                            pass
-                            
-                        
-                    recordName +=1
-              
-                i = i + 1 
-            
-            id = id + 1
-
-        TabUrl = []
-
-        id = 0;
-        while (id < 10):
-            stri = "1" * id
-            #TODO : why this fucking regex don't work ???
-            #if not re.match('^1?$|^(11+?)\1+$',stri):
-            if str(id) in '2357':
-                v = "".join(subscribers[id]).replace(',','')
-                TabUrl.append(v)
-            id = id +1
-        
-        xbmc.log(str(TabUrl))
-        
-        streamurl = TabUrl[3] + "~" + TabUrl[1] + "~" + TabUrl[2] + "~" + TabUrl[0]
-        
-        api_call = "https://openload.co/stream/" + streamurl + "?mime=true"
+        api_call = "https://openload.co/stream/" + url + "?mime=true"
         
         xbmc.log(api_call)
         
@@ -257,3 +127,4 @@ class cHoster(iHoster):
             return True, api_call
             
         return False, False
+ 
